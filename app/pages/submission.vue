@@ -57,7 +57,7 @@
           </v-card>
           <v-btn
             color="primary"
-            @click="step = 3"
+            @click="handleMoveToStep3"
             :disabled="step2SelectedValueIds.length !== 10"
             >次に進む</v-btn
           >
@@ -65,6 +65,29 @@
         </v-stepper-content>
 
         <v-stepper-content step="3">
+          <p>10 個の価値観の順位付けをして下さい。</p>
+
+          <client-only>
+            <draggable
+              :value="step3SelectedValueIds"
+              @input="handleClickStep3Card"
+              :animation="200"
+              ghost-class="moving-card"
+            >
+              <v-card
+                v-for="value in filteredValuesByStep2"
+                :key="value.id"
+                class="mb-12"
+                :color="`${
+                  step2SelectedValueIds.includes(value.id) ? 'blue' : 'grey'
+                } lighten-2`"
+                hover
+              >
+                <v-card-title> {{ value.label }} </v-card-title>
+                <v-card-text> {{ value.description }} </v-card-text>
+              </v-card>
+            </draggable>
+          </client-only>
           <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
 
           <v-btn color="primary" @click="step = 1">完了する</v-btn>
@@ -77,6 +100,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import draggable from 'vuedraggable'
 import { values } from '~/constants'
 import { User, Value } from '~/types/model'
 import firebase from 'firebase/app'
@@ -84,12 +108,16 @@ import firebase from 'firebase/app'
 type Values = typeof values
 
 export default Vue.extend({
+  components: {
+    draggable,
+  },
   data() {
     return {
       cardSize: 6,
       step: 1,
       step1SelectedValueIds: [] as number[],
       step2SelectedValueIds: [] as number[],
+      step3SelectedValueIds: [] as number[],
     }
   },
   computed: {
@@ -97,6 +125,11 @@ export default Vue.extend({
     filteredValuesByStep1(): Values {
       return this.values.filter((v) =>
         this.step1SelectedValueIds.includes(v.id)
+      )
+    },
+    filteredValuesByStep2(): Values {
+      return this.values.filter((v) =>
+        this.step2SelectedValueIds.includes(v.id)
       )
     },
     currentUser(): User | null {
@@ -128,6 +161,9 @@ export default Vue.extend({
       this.$accessor.value.setEditingValue({ ...value, id: valueId })
       this.step1SelectedValueIds = value.step1
       this.step2SelectedValueIds = value.step2
+      this.step3SelectedValueIds = value.step3
+      if (this.step2SelectedValueIds.length) this.step = 2
+      if (this.step3SelectedValueIds.length) this.step = 3
     }
   },
   methods: {
@@ -155,6 +191,7 @@ export default Vue.extend({
     },
     handleMoveToStep2() {
       this.step = 2
+      // TODO: このUXでいいか確認
       this.step2SelectedValueIds = this.step1SelectedValueIds
     },
     async handleClickStep2Card(id: number) {
@@ -179,9 +216,31 @@ export default Vue.extend({
         console.error(error)
       }
     },
+    handleMoveToStep3() {
+      this.step = 3
+      this.step3SelectedValueIds = this.step2SelectedValueIds
+    },
+    async handleClickStep3Card() {
+      try {
+        await this.$fire.firestore
+          .collection('users')
+          .doc(this.currentUser!.uid)
+          .collection('values')
+          .doc(this.editingValue!.id)
+          .update({
+            step3: this.step3SelectedValueIds,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+      } catch (error) {
+        console.error(error)
+      }
+    },
   },
 })
 </script>
 
 <style lang="scss" scoped>
+.moving-card {
+  visibility: hidden;
+}
 </style>
