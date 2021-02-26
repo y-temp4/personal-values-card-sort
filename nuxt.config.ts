@@ -21,8 +21,9 @@ const config: NuxtConfig = {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    'nuxt-typed-vuex',
   ],
-  modules: [],
+  modules: ['@nuxtjs/firebase'],
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
@@ -37,6 +38,29 @@ const config: NuxtConfig = {
         error: colors.deepOrange.accent4,
         success: colors.green.accent3,
       },
+    },
+  },
+  firebase: {
+    config: {
+      apiKey: 'AIzaSyCuBrQhbPYEZjjIXakj6nTWiXw4hvkCkxA',
+      authDomain: 'personal-values-card-sort.firebaseapp.com',
+      projectId: 'personal-values-card-sort',
+      storageBucket: 'personal-values-card-sort.appspot.com',
+      messagingSenderId: '474614373751',
+      appId: '1:474614373751:web:b95f7739a84779ea189572',
+      measurementId: 'G-YJLFDY332V',
+    },
+    services: {
+      auth: {
+        emulatorPort: process.env.NODE_ENV === 'development' ? 9099 : undefined,
+      },
+      firestore: {
+        emulatorPort: process.env.NODE_ENV === 'development' ? 8080 : undefined,
+      },
+      functions: {
+        emulatorPort: process.env.NODE_ENV === 'development' ? 5001 : undefined,
+      },
+      analytics: true,
     },
   },
   build: {},

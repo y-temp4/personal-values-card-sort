@@ -30,11 +30,86 @@
         >
       </v-list-item-content>
     </v-list-item>
-    <v-btn color="primary" class="font-weight-bold" x-large
+    <v-btn
+      v-if="!isLoggedIn"
+      color="primary"
+      class="font-weight-bold"
+      x-large
+      @click="handleStart"
       >診断をはじめる</v-btn
+    >
+    <v-btn
+      v-else
+      color="primary"
+      class="font-weight-bold"
+      x-large
+      @click="handleContinue"
+      >診断を続ける</v-btn
     >
   </main>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue'
+import firebase from 'firebase/app'
+import { User, Value } from '~/types/model'
+
+export default Vue.extend({
+  computed: {
+    currentUser(): User | null {
+      return this.$accessor.user.currentUser
+    },
+    isLoggedIn(): boolean {
+      return !!this.currentUser
+    },
+  },
+  async mounted() {
+    await this.$accessor.user.getCurrentUser()
+  },
+  methods: {
+    async handleStart() {
+      if (!this.currentUser) {
+        const user = await this.$fire.auth.signInAnonymously()
+        if (!user.user) return
+
+        const userDocRef = this.$fire.firestore.doc(`users/${user.user.uid}`)
+        const existsUser = (await userDocRef.get()).exists
+        if (!existsUser) {
+          await userDocRef.set({
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+          const userDataBase = (
+            await this.$fire.firestore
+              .collection(`users`)
+              .doc(user.user.uid)
+              .get()
+          ).data
+          const userData = { ...userDataBase, uid: user.user.uid } as User
+          this.$accessor.user.setCurrentUser({
+            ...userData,
+          })
+          const valueDocRef = await userDocRef.collection('values').add({
+            step1: [],
+            step2: [],
+            step3: [],
+            isPublic: false,
+            finishedAt: null,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+          // window.valueDocRef = valueDocRef
+          const valudId = (await valueDocRef.get()).id
+          const value = (await valueDocRef.get()).data() as Value
+          console.log({ value })
+          this.$accessor.value.setEditingValue({ ...value, id: valudId })
+        }
+      }
+      this.$router.push('/submission')
+    },
+    handleContinue() {
+      this.$router.push('/submission')
+    },
+  },
+})
 </script>

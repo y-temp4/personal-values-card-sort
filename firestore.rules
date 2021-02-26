@@ -1,8 +1,60 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if false;
+    match /users/{uid} {
+      allow read: if isAuthenticated()
+        && isUserAuthenticated(uid);
+      allow create: if isAuthenticated()
+        && isUserAuthenticated(uid)
+        && incomingData().createdAt == request.time
+        && incomingData().updatedAt == request.time;
+
+      match /values/{valueId} {
+        allow read: if isAuthenticated()
+          && isUserAuthenticated(uid);
+        allow create: if isAuthenticated()
+          && isUserAuthenticated(uid)
+          && isValidValue(incomingData())
+          && incomingData().step1.size() == 0
+          && incomingData().step2.size() == 0
+          && incomingData().step3.size() == 0
+          && incomingData().isPublic == false
+          && incomingData().finishedAt == null
+          && incomingData().updatedAt == request.time;
+        allow update: if isAuthenticated()
+          && isUserAuthenticated(uid)
+          && isValidValue(incomingData())
+          && incomingData().step1.hasOnly(validValueIds())
+          && incomingData().step1.toSet().size() == incomingData().step1.size()
+          && incomingData().step2.hasOnly(validValueIds())
+          && incomingData().step2.toSet().size() == incomingData().step2.size()
+          && incomingData().step3.hasOnly(validValueIds())
+          && incomingData().step3.toSet().size() == incomingData().step3.size()
+          && incomingData().updatedAt == request.time;
+
+        function isValidValue(value) {
+          return value.size() == 7
+            && 'step1' in value && value.step1 is list
+            && 'step2' in value && value.step2 is list
+            && 'step3' in value && value.step3 is list
+            && 'isPublic' in value && value.isPublic is bool
+            && 'finishedAt' in value && (value.finishedAt is timestamp || value.finishedAt == null)
+            && 'createdAt' in value && value.createdAt is timestamp
+            && 'updatedAt' in value && value.updatedAt is timestamp;
+        }
+        function validValueIds() {
+          return [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83]
+        }
+      }
+    }
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    function isUserAuthenticated(uid) {
+      return request.auth.uid == uid;
+    }
+    function incomingData() {
+      return request.resource.data;
     }
   }
 }

@@ -17,16 +17,17 @@
     "baseUrl": ".",
     "paths": {
       "~/*": [
-        "./*"
+        "./app/*"
       ],
       "@/*": [
-        "./*"
+        "./app/*"
       ]
     },
     "types": [
       "@types/node",
       "@nuxt/types",
-      "vuetify"
+      "vuetify",
+      "@nuxtjs/firebase"
     ]
   },
   "exclude": [
