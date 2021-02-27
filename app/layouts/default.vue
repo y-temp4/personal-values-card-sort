@@ -1,5 +1,10 @@
 <template>
   <v-app>
+    <v-app-bar app dense absolute elevation="3">
+      <v-toolbar-title>
+        <n-link to="/"> 自己省察テスト </n-link>
+      </v-toolbar-title>
+    </v-app-bar>
     <v-main>
       <v-container>
         <nuxt />

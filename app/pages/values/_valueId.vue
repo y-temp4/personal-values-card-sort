@@ -61,9 +61,10 @@ export default Vue.extend({
       return this.currentUser?.uid === this.value?.userRef.split('/')[1]
     },
     formattedFinishedAt(): string {
-      return new Intl.DateTimeFormat('ja').format(
-        this.value?.finishedAt?.toDate()
+      const formattedFinishedAt = new Intl.DateTimeFormat('ja').format(
+        (this.value?.finishedAt?.seconds ?? 0) * 1000
       )
+      return formattedFinishedAt
     },
   },
   async fetch() {

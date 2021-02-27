@@ -287,6 +287,7 @@ export default Vue.extend({
           .update({
             step2: this.step2SelectedValueIds,
             step3: this.step3SelectedValueIds,
+            finishedAt: firebase.firestore.FieldValue.serverTimestamp(),
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
           })
         await this.$fire.firestore
