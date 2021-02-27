@@ -171,7 +171,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    async handleClickStep1Card(id: number) {
+    async handleClickStep1Card(id: ValueId) {
       try {
         if (!this.step1SelectedValueIds.includes(id)) {
           this.step1SelectedValueIds.push(id)
@@ -198,7 +198,7 @@ export default Vue.extend({
       // TODO: このUXでいいか確認
       this.step2SelectedValueIds = this.step1SelectedValueIds
     },
-    async handleClickStep2Card(id: number) {
+    async handleClickStep2Card(id: ValueId) {
       try {
         if (!this.step2SelectedValueIds.includes(id)) {
           this.step2SelectedValueIds.push(id)
