@@ -69,7 +69,12 @@ export default Vue.extend({
   },
   async fetch() {
     if (this.$accessor.value.editingValue) {
-      this.value = this.$accessor.value.editingValue
+      this.value = {
+        ...this.$accessor.value.editingValue,
+        // FIXME: finishedAtが取得できないので
+        // @ts-expect-error
+        finishedAt: { seconds: Math.floor(Date.now() / 1000) },
+      }
       this.isLoading = false
       console.log(
         'this.$accessor.value.editingValue',

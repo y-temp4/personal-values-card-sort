@@ -97,7 +97,7 @@
               @input="handleClickStep3Card"
               :animation="200"
               ghost-class="moving-card"
-              tag="v-row"
+              class="row"
             >
               <v-col
                 v-for="(value, index) in filteredValuesByStep2"
