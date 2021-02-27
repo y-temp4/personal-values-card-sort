@@ -70,7 +70,19 @@ const config: NuxtConfig = {
   buildOptimisations: {
     profile: 'risky',
   },
-  build: {},
+  build: {
+    extend(config, { isServer }) {
+      if (isServer) {
+        config.externals = {
+          '@firebase/app': 'commonjs @firebase/app',
+          '@firebase/firestore': 'commonjs @firebase/firestore',
+          '@firebase/analytics': 'commonjs @firebase/analytics',
+          '@firebase/auth': 'commonjs @firebase/auth',
+          '@firebase/functions': 'commonjs @firebase/functions',
+        }
+      }
+    },
+  },
 }
 
 export default config
