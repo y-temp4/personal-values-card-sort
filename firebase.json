@@ -4,11 +4,12 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "predeploy": "npm --prefix \"$RESOURCE_DIR\" run build"
+    "predeploy": "npm --prefix functions run build && npm run build && npm run copy:ssr",
+    "source": "functions"
   },
   "hosting": {
-    "predeploy": "npm run build",
-    "public": ".nuxt/dist",
+    "predeploy": "npm run copy:client",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",

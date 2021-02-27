@@ -1,5 +1,5 @@
 import { NuxtConfig } from '@nuxt/types'
-import colors from 'vuetify/es5/util/colors'
+// import colors from 'vuetify/es5/util/colors'
 
 const config: NuxtConfig = {
   srcDir: 'app',
@@ -34,13 +34,14 @@ const config: NuxtConfig = {
     theme: {
       // dark: true,
       themes: {
-        primary: colors.blue.darken2,
-        accent: colors.grey.darken3,
-        secondary: colors.amber.darken3,
-        info: colors.teal.lighten1,
-        warning: colors.amber.base,
-        error: colors.deepOrange.accent4,
-        success: colors.green.accent3,
+        primary: '#1976d2',
+        // primary: colors.blue.darken2,
+        // accent: colors.grey.darken3,
+        // secondary: colors.amber.darken3,
+        // info: colors.teal.lighten1,
+        // warning: colors.amber.base,
+        // error: colors.deepOrange.accent4,
+        // success: colors.green.accent3,
       },
     },
   },
@@ -70,19 +71,19 @@ const config: NuxtConfig = {
   buildOptimisations: {
     profile: process.env.NODE_ENV === 'development' ? 'risky' : 'false',
   },
-  build: {
-    extend(config, { isServer }) {
-      if (isServer) {
-        config.externals = {
-          '@firebase/app': 'commonjs @firebase/app',
-          '@firebase/auth': 'commonjs @firebase/auth',
-          '@firebase/firestore': 'commonjs @firebase/firestore',
-          '@firebase/analytics': 'commonjs @firebase/analytics',
-          '@firebase/functions': 'commonjs @firebase/functions',
-        }
-      }
-    },
-  },
+  // build: {
+  //   extend(config, { isServer }) {
+  //     if (isServer) {
+  //       config.externals = {
+  //         '@firebase/app': 'commonjs @firebase/app',
+  //         '@firebase/auth': 'commonjs @firebase/auth',
+  //         '@firebase/firestore': 'commonjs @firebase/firestore',
+  //         '@firebase/analytics': 'commonjs @firebase/analytics',
+  //         '@firebase/functions': 'commonjs @firebase/functions',
+  //       }
+  //     }
+  //   },
+  // },
 }
 
 export default config

@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "nuxt",
     "build": "nuxt build",
-    "build-tmp": "nuxt build && npm run build:copy:ssr",
-    "build:copy:ssr": "rimraf functions/ssr && mkdir -p functions/ssr && cp -R .nuxt/dist functions/ssr/dist",
+    "copy:ssr": "rimraf functions/{nuxt,index.js,nuxt.config.js} && cp -R .nuxt functions/nuxt && cp functions/dist/** functions/",
+    "copy:ssr-tmp": "rimraf functions/nuxt && mkdir -p functions/nuxt && cp -R .nuxt/ functions/nuxt/",
+    "copy:client": "rimraf public/** && mkdir -p public/_nuxt && cp -R .nuxt/dist/client/ public/_nuxt && cp -a app/static/. public/",
     "start": "nuxt start"
   },
   "dependencies": {
@@ -21,9 +22,7 @@
   "devDependencies": {
     "@nuxt/types": "^2.14.5",
     "@nuxt/typescript-build": "^2.0.3",
-    "@nuxtjs/vercel-builder": "0.21.0",
     "@nuxtjs/vuetify": "^1.11.2",
-    "firebase-tools": "^9.5.0",
     "prettier": "^2.1.1"
   }
 }
