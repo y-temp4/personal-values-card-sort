@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "nuxt",
-    "build": "nuxt build",
+    "build": "nuxt build && npm run build:copy:ssr",
+    "build:copy:ssr": "rimraf functions/ssr && mkdir -p functions/ssr && cp -R .nuxt/dist functions/ssr/dist",
     "start": "nuxt start"
   },
   "dependencies": {

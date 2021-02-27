@@ -1,9 +1,17 @@
-// import * as functions from "firebase-functions";
+import * as functions from 'firebase-functions'
+const { Nuxt } = require('nuxt')
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+const nuxt = new Nuxt({
+  dev: false,
+  buildDir: 'ssr',
+  // build: {
+  //   publicPath: '/assets/',
+  // },
+})
+
+exports.ssr = functions
+  .runWith({ memory: '512MB' })
+  .https.onRequest(async (req, res) => {
+    await nuxt.ready()
+    return nuxt.render(req, res)
+  })
