@@ -1,12 +1,12 @@
 import * as functions from 'firebase-functions'
 const { Nuxt } = require('nuxt')
 
+const config = require('./nuxt.config.ts')
+
 const nuxt = new Nuxt({
+  ...config,
   dev: false,
   buildDir: 'ssr',
-  // build: {
-  //   publicPath: '/assets/',
-  // },
 })
 
 exports.ssr = functions
