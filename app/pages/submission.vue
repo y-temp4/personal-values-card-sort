@@ -33,35 +33,59 @@
               </v-card>
             </v-col>
           </v-row>
-          <v-btn
-            color="primary"
-            @click="handleMoveToStep2"
-            :disabled="step1SelectedValueIds.length < 10"
-            >次に進む</v-btn
-          >
+          <v-footer fixed>
+            <v-container class="my-1">
+              <v-row align="center">
+                <v-btn
+                  color="primary"
+                  @click="handleMoveToStep2"
+                  :disabled="step1SelectedValueIds.length < 10"
+                  >次に進む</v-btn
+                >
+                <div class="ml-5">
+                  {{ `現在 ${step1SelectedValueIds.length}個 選択中` }}
+                </div>
+              </v-row>
+            </v-container>
+          </v-footer>
         </v-stepper-content>
         <v-stepper-content step="2">
           <p>選んだ価値観を 10 個に絞って下さい。</p>
-          <v-card
-            v-for="value in filteredValuesByStep1"
-            :key="value.id"
-            class="mb-2"
-            :color="`${
-              step2SelectedValueIds.includes(value.id) ? 'blue' : 'grey'
-            } lighten-2`"
-            hover
-            @click="handleClickStep2Card(value.id)"
-          >
-            <v-card-title> {{ value.label }} </v-card-title>
-            <v-card-text> {{ value.description }} </v-card-text>
-          </v-card>
-          <v-btn
-            color="primary"
-            @click="handleMoveToStep3"
-            :disabled="step2SelectedValueIds.length !== 10"
-            >次に進む</v-btn
-          >
-          <v-btn @click="step = 1">ステップ1に戻る</v-btn>
+          <v-row>
+            <v-col
+              v-for="value in filteredValuesByStep1"
+              :key="value.id"
+              :cols="cardSize"
+            >
+              <v-card
+                :color="`${
+                  step2SelectedValueIds.includes(value.id) ? 'blue' : 'grey'
+                } lighten-2`"
+                hover
+                @click="handleClickStep2Card(value.id)"
+              >
+                <v-card-title> {{ value.label }} </v-card-title>
+                <v-card-text> {{ value.description }} </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <v-footer fixed>
+            <v-container class="my-1">
+              <v-row align="center">
+                <v-btn
+                  color="primary"
+                  @click="handleMoveToStep3"
+                  :disabled="step2SelectedValueIds.length !== 10"
+                  >次に進む</v-btn
+                >
+                <v-btn class="ml-3" @click="step = 1">ステップ1に戻る</v-btn>
+                <div class="ml-5">
+                  {{ `現在 ${step2SelectedValueIds.length}個 選択中` }}
+                </div>
+              </v-row>
+            </v-container>
+          </v-footer>
         </v-stepper-content>
 
         <v-stepper-content step="3">
@@ -73,25 +97,32 @@
               @input="handleClickStep3Card"
               :animation="200"
               ghost-class="moving-card"
+              tag="v-row"
             >
-              <v-card
+              <v-col
                 v-for="(value, index) in filteredValuesByStep2"
                 :key="value.id"
-                class="mb-2"
-                :color="`${
-                  step2SelectedValueIds.includes(value.id) ? 'blue' : 'grey'
-                } lighten-2`"
-                hover
+                :cols="cardSize"
               >
-                <v-card-title>
-                  {{ `${index + 1}位: ${value.label}` }}
-                </v-card-title>
-                <v-card-text> {{ value.description }} </v-card-text>
-              </v-card>
+                <v-card
+                  :key="value.id"
+                  :color="`${
+                    step2SelectedValueIds.includes(value.id) ? 'blue' : 'grey'
+                  } lighten-2`"
+                  hover
+                >
+                  <v-card-title>
+                    {{ `${index + 1}位: ${value.label}` }}
+                  </v-card-title>
+                  <v-card-text> {{ value.description }} </v-card-text>
+                </v-card>
+              </v-col>
             </draggable>
           </client-only>
-          <v-btn color="primary" @click="handleFinish">完了する</v-btn>
-          <v-btn @click="step = 2">ステップ2に戻る</v-btn>
+          <div class="flex mt-6">
+            <v-btn color="primary" @click="handleFinish">完了する</v-btn>
+            <v-btn class="ml-3" @click="step = 2">ステップ2に戻る</v-btn>
+          </div>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>

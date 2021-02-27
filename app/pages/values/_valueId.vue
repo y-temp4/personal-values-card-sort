@@ -4,15 +4,21 @@
       <v-progress-circular indeterminate color="primary" />
     </div>
     <div v-else>
-      <v-card
-        v-for="(value, index) in answeredValues"
-        :key="value.id"
-        class="mb-2"
-        :color="`blue lighten-2`"
-      >
-        <v-card-title> {{ `${index + 1}位: ${value.label}` }} </v-card-title>
-        <v-card-text> {{ value.description }} </v-card-text>
-      </v-card>
+      診断日: <time>{{ formattedFinishedAt }}</time>
+      <v-row>
+        <v-col
+          v-for="(value, index) in answeredValues"
+          :key="value.id"
+          :cols="6"
+        >
+          <v-card class="mb-2" :color="`blue lighten-2`">
+            <v-card-title>
+              {{ `${index + 1}位: ${value.label}` }}
+            </v-card-title>
+            <v-card-text> {{ value.description }} </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
       <v-btn
         v-if="currentUser && currentUser.isAnonymous"
         @click="linkWithGoogle"
@@ -53,6 +59,11 @@ export default Vue.extend({
     },
     isAnsweredUser(): boolean {
       return this.currentUser?.uid === this.value?.userRef.split('/')[1]
+    },
+    formattedFinishedAt(): string {
+      return new Intl.DateTimeFormat('ja').format(
+        this.value?.finishedAt?.toDate()
+      )
     },
   },
   async fetch() {
