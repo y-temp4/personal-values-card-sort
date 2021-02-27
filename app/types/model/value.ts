@@ -1,6 +1,6 @@
 import type firebase from 'firebase/app'
 
-type ValueId =
+export type ValueId =
   | 1
   | 2
   | 3
@@ -85,14 +85,18 @@ type ValueId =
   | 82
   | 83
 
-type ValueBase = {
+export type ValueDocData = {
   step1: ValueId[]
   step2: ValueId[]
   step3: ValueId[]
   isPublic: boolean
+  userRef: firebase.firestore.DocumentReference
   finishedAt: null | firebase.firestore.Timestamp
   createdAt: firebase.firestore.Timestamp
   updatedAt: firebase.firestore.Timestamp
 }
 
-export type Value = ValueBase & { id: string }
+export type Value = Omit<ValueDocData, 'userRef'> & {
+  id: string
+  userRef: string
+}

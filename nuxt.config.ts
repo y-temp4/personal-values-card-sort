@@ -22,6 +22,7 @@ const config: NuxtConfig = {
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
     'nuxt-typed-vuex',
+    'nuxt-build-optimisations',
   ],
   modules: ['@nuxtjs/firebase'],
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)
@@ -62,6 +63,9 @@ const config: NuxtConfig = {
       },
       analytics: true,
     },
+  },
+  buildOptimisations: {
+    profile: 'risky',
   },
   build: {},
 }

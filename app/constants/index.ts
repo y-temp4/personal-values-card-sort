@@ -1,4 +1,6 @@
-export const values = [
+import { ValueId } from '~/types/model'
+
+export const values: { id: ValueId; label: string; description: string }[] = [
   { id: 1, label: '受容', description: 'ありのままの自分を受け入れてもらう' },
   { id: 2, label: '正確', description: '自分の意見や信念を正しく伝える' },
   { id: 3, label: '達成', description: 'なにか重要なことを達成する' },

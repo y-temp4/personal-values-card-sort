@@ -33,11 +33,13 @@ service cloud.firestore {
           && incomingData().updatedAt == request.time;
 
         function isValidValue(value) {
-          return value.size() == 7
+          return value.size() == 9
+            && 'id' in value && value.id is string && value.id.size() == 20
             && 'step1' in value && value.step1 is list
             && 'step2' in value && value.step2 is list
             && 'step3' in value && value.step3 is list
             && 'isPublic' in value && value.isPublic is bool
+            && 'userRef' in value && value.userRef is path
             && 'finishedAt' in value && (value.finishedAt is timestamp || value.finishedAt == null)
             && 'createdAt' in value && value.createdAt is timestamp
             && 'updatedAt' in value && value.updatedAt is timestamp;
@@ -47,6 +49,9 @@ service cloud.firestore {
         }
       }
     }
+    match /{path=**}/values/{valueId} {
+      allow read: if existingData().isPublic == true;
+    }
     function isAuthenticated() {
       return request.auth != null;
     }
@@ -55,6 +60,9 @@ service cloud.firestore {
     }
     function incomingData() {
       return request.resource.data;
+    }
+    function existingData() {
+      return resource.data;
     }
   }
 }

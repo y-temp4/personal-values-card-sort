@@ -45,7 +45,7 @@
           <v-card
             v-for="value in filteredValuesByStep1"
             :key="value.id"
-            class="mb-12"
+            class="mb-2"
             :color="`${
               step2SelectedValueIds.includes(value.id) ? 'blue' : 'grey'
             } lighten-2`"
@@ -75,22 +75,22 @@
               ghost-class="moving-card"
             >
               <v-card
-                v-for="value in filteredValuesByStep2"
+                v-for="(value, index) in filteredValuesByStep2"
                 :key="value.id"
-                class="mb-12"
+                class="mb-2"
                 :color="`${
                   step2SelectedValueIds.includes(value.id) ? 'blue' : 'grey'
                 } lighten-2`"
                 hover
               >
-                <v-card-title> {{ value.label }} </v-card-title>
+                <v-card-title>
+                  {{ `${index + 1}位: ${value.label}` }}
+                </v-card-title>
                 <v-card-text> {{ value.description }} </v-card-text>
               </v-card>
             </draggable>
           </client-only>
-          <v-card class="mb-12" color="grey lighten-1" height="200px"></v-card>
-
-          <v-btn color="primary" @click="step = 1">完了する</v-btn>
+          <v-btn color="primary" @click="handleFinish">完了する</v-btn>
           <v-btn @click="step = 2">ステップ2に戻る</v-btn>
         </v-stepper-content>
       </v-stepper-items>
@@ -102,7 +102,7 @@
 import Vue from 'vue'
 import draggable from 'vuedraggable'
 import { values } from '~/constants'
-import { User, Value } from '~/types/model'
+import { User, ValueDocData, Value, ValueId } from '~/types/model'
 import firebase from 'firebase/app'
 
 type Values = typeof values
@@ -115,9 +115,9 @@ export default Vue.extend({
     return {
       cardSize: 6,
       step: 1,
-      step1SelectedValueIds: [] as number[],
-      step2SelectedValueIds: [] as number[],
-      step3SelectedValueIds: [] as number[],
+      step1SelectedValueIds: [] as ValueId[],
+      step2SelectedValueIds: [] as ValueId[],
+      step3SelectedValueIds: [] as ValueId[],
     }
   },
   computed: {
@@ -157,8 +157,12 @@ export default Vue.extend({
       ).docs
       if (!valueDocSnap) throw new Error('valueDocSnap not found.')
       const valueId = valueDocSnap.id
-      const value = valueDocSnap.data() as Value
-      this.$accessor.value.setEditingValue({ ...value, id: valueId })
+      const value = valueDocSnap.data() as ValueDocData
+      this.$accessor.value.setEditingValue({
+        ...value,
+        id: valueId,
+        userRef: value.userRef.path,
+      })
       this.step1SelectedValueIds = value.step1
       this.step2SelectedValueIds = value.step2
       this.step3SelectedValueIds = value.step3
@@ -233,6 +237,37 @@ export default Vue.extend({
           })
       } catch (error) {
         console.error(error)
+      }
+    },
+    async handleFinish() {
+      const isOk = confirm('自己省察テストを完了してもよろしいですか？')
+      if (isOk) {
+        this.$accessor.value.setEditingValue({
+          ...this.$accessor.value.editingValue!,
+          step1: this.step1SelectedValueIds,
+          step2: this.step2SelectedValueIds,
+          step3: this.step3SelectedValueIds,
+        })
+        await this.$fire.firestore
+          .collection('users')
+          .doc(this.currentUser!.uid)
+          .collection('values')
+          .doc(this.editingValue!.id)
+          .update({
+            step2: this.step2SelectedValueIds,
+            step3: this.step3SelectedValueIds,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+        await this.$fire.firestore
+          .collection('users')
+          .doc(this.currentUser!.uid)
+          .collection('values')
+          .doc(this.editingValue!.id)
+          .update({
+            finishedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          })
+        this.$router.push(`/values/${this.editingValue!.id}`)
       }
     },
   },

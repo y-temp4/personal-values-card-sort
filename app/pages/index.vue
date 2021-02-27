@@ -46,13 +46,23 @@
       @click="handleContinue"
       >診断を続ける</v-btn
     >
+    <br />
+    <br />
+    <v-btn
+      v-if="isLoggedIn"
+      color="info"
+      class="font-weight-bold"
+      x-large
+      @click="handleLogout"
+      >ログアウト</v-btn
+    >
   </main>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import firebase from 'firebase/app'
-import { User, Value } from '~/types/model'
+import { User, ValueDocData } from '~/types/model'
 
 export default Vue.extend({
   computed: {
@@ -79,36 +89,58 @@ export default Vue.extend({
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
           })
-          const userDataBase = (
-            await this.$fire.firestore
-              .collection(`users`)
-              .doc(user.user.uid)
-              .get()
-          ).data
-          const userData = { ...userDataBase, uid: user.user.uid } as User
+          const userRef = this.$fire.firestore
+            .collection('users')
+            .doc(user.user.uid)
+          const userDataBase = (await userRef.get()).data
+          const userData = {
+            ...userDataBase,
+            uid: user.user.uid,
+            isAnonymous: user.user.isAnonymous,
+          } as User
           this.$accessor.user.setCurrentUser({
             ...userData,
           })
-          const valueDocRef = await userDocRef.collection('values').add({
+          function autoId(): string {
+            const chars =
+              'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+            let autoId = ''
+            for (var i = 0; i < 20; i++) {
+              autoId += chars.charAt(Math.floor(Math.random() * chars.length))
+            }
+            return autoId
+          }
+          const valueId = autoId()
+          const valueDocRef = userDocRef.collection('values').doc(valueId)
+          await valueDocRef.set({
+            id: valueId,
             step1: [],
             step2: [],
             step3: [],
+            userRef,
             isPublic: false,
             finishedAt: null,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
           })
-          // window.valueDocRef = valueDocRef
           const valudId = (await valueDocRef.get()).id
-          const value = (await valueDocRef.get()).data() as Value
+          const value = (await valueDocRef.get()).data() as ValueDocData
           console.log({ value })
-          this.$accessor.value.setEditingValue({ ...value, id: valudId })
+          this.$accessor.value.setEditingValue({
+            ...value,
+            id: valudId,
+            userRef: value.userRef.path,
+          })
         }
       }
       this.$router.push('/submission')
     },
     handleContinue() {
       this.$router.push('/submission')
+    },
+    async handleLogout() {
+      await this.$fire.auth.signOut()
+      location.href = '/'
     },
   },
 })

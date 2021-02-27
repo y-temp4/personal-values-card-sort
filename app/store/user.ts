@@ -1,5 +1,5 @@
 import { getterTree, mutationTree, actionTree } from 'nuxt-typed-vuex'
-import { User } from '~/types/model'
+import { UserDocData, User } from '~/types/model'
 import type firebase from 'firebase/app'
 
 export const state = () => ({
@@ -30,13 +30,18 @@ export const actions = actionTree(
         })
       }
       const user = await getCurrentUser()
+      console.log({ user })
       if (!user) return
       const userRef = await this.$fire.firestore
         .collection('users')
         .doc(user.uid)
         .get()
-      const userData = userRef.data() as User
-      commit('setCurrentUser', { ...userData, uid: user.uid })
+      const userData = userRef.data() as UserDocData
+      commit('setCurrentUser', {
+        ...userData,
+        uid: user.uid,
+        isAnonymous: user.isAnonymous,
+      })
     },
   }
 )
