@@ -161,28 +161,28 @@ export default Vue.extend({
       this.isLoading = false
       return
     }
-    const [valueDocSnap] = (
-      await this.$fire.firestore
-        .collection('users')
-        .doc(this.currentUser!.uid)
-        .collection('values')
-        .orderBy('createdAt', 'desc')
-        .limit(1)
-        .get()
-    ).docs
-    if (!valueDocSnap) {
-      this.isLoading = false
-      return
-    }
-    const valueDoc = valueDocSnap.data() as ValueDocData
-    this.latestValue = {
-      ...valueDoc,
-      id: valueDocSnap.id,
-      userRef: valueDoc.userRef.path
-    }
+    await this.setLatestValueByUserUid(this.currentUser.uid)
     this.isLoading = false
   },
   methods: {
+    async setLatestValueByUserUid(uid: string) {
+      const [valueDocSnap] = (
+        await this.$fire.firestore
+          .collection('users')
+          .doc(uid)
+          .collection('values')
+          .orderBy('createdAt', 'desc')
+          .limit(1)
+          .get()
+      ).docs
+      if (!valueDocSnap) return
+      const valueDoc = valueDocSnap.data() as ValueDocData
+      this.latestValue = {
+        ...valueDoc,
+        id: valueDocSnap.id,
+        userRef: valueDoc.userRef.path
+      }
+    },
     async handleStart() {
       if (!this.isLoggedIn) {
         const user = await this.$fire.auth.signInAnonymously()
@@ -273,25 +273,8 @@ export default Vue.extend({
         uid: user.user.uid,
         isAnonymous: user.user.isAnonymous
       } as User
-      this.$accessor.user.setCurrentUser({
-        ...userData
-      })
-      const [valueDocSnap] = (
-        await this.$fire.firestore
-          .collection('users')
-          .doc(this.currentUser!.uid)
-          .collection('values')
-          .orderBy('createdAt', 'desc')
-          .limit(1)
-          .get()
-      ).docs
-      if (!valueDocSnap) return
-      const valueDoc = valueDocSnap.data() as ValueDocData
-      this.latestValue = {
-        ...valueDoc,
-        id: valueDocSnap.id,
-        userRef: valueDoc.userRef.path
-      }
+      this.$accessor.user.setCurrentUser({ ...userData })
+      await this.setLatestValueByUserUid(user.user.uid)
     }
   },
   head(): MetaInfo {
