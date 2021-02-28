@@ -29,7 +29,7 @@
               />
             </v-col>
           </v-row>
-          <v-footer fixed>
+          <v-footer fixed elevation="5">
             <v-container class="my-1">
               <v-row align="center">
                 <v-btn
@@ -61,7 +61,7 @@
               />
             </v-col>
           </v-row>
-          <v-footer fixed>
+          <v-footer fixed elevation="5">
             <v-container class="my-1">
               <v-row align="center">
                 <v-btn
