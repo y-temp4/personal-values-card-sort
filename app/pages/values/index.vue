@@ -3,24 +3,28 @@
     <div v-if="isLoading" class="text-center">
       <v-progress-circular indeterminate color="primary" />
     </div>
-    <v-data-table
-      v-else
-      :headers="headers"
-      :items="userValues"
-      :items-per-page="10"
-      class="elevation-1"
-    >
-      <!-- eslint-disable-next-line -->
-      <template v-slot:item.detail="{ item }">
-        <v-btn :to="`/values/${item.id}`" nuxt> 詳細を見る </v-btn>
-      </template>
-    </v-data-table>
+    <template v-else>
+      <div class="h2 mb-3">診断結果一覧</div>
+      <v-data-table
+        :headers="headers"
+        :items="userValues"
+        :items-per-page="10"
+        class="elevation-1"
+        disable-sort
+      >
+        <!-- eslint-disable-next-line -->
+        <template v-slot:item.detail="{ item }">
+          <v-btn :to="`/values/${item.id}`" nuxt> 詳細を見る </v-btn>
+        </template>
+      </v-data-table>
+    </template>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import firebase from 'firebase/app'
+import { MetaInfo } from 'vue-meta'
 import { User, ValueDocData, Value } from '~/types/model'
 
 const headers = [
@@ -79,8 +83,10 @@ export default Vue.extend({
       return new Intl.DateTimeFormat('ja').format(finishedAt.toDate())
     },
   },
+  head(): MetaInfo {
+    return {
+      title: '診断結果一覧',
+    }
+  },
 })
 </script>
-
-<style lang="scss" scoped>
-</style>

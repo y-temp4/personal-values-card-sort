@@ -25,9 +25,16 @@
         @click="linkWithGoogle"
         >Googleで認証してデータを保存する</v-btn
       >
-      <v-btn v-if="isAnsweredUser" @click="changePublicStatus"
+      <v-btn
+        v-if="isAnsweredUser"
+        @click="changePublicStatus"
+        :color="!isPublic ? 'primary' : null"
+        class="mt-4"
         >{{ !isPublic ? '公開する' : '非公開にする' }}
       </v-btn>
+      <br />
+      <br />
+      <n-link to="/values" v-if="isAnsweredUser">診断結果一覧に戻る</n-link>
     </div>
   </div>
 </template>
@@ -177,6 +184,3 @@ export default Vue.extend({
   },
 })
 </script>
-
-<style lang="scss" scoped>
-</style>

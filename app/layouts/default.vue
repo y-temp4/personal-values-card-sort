@@ -15,7 +15,15 @@
       </v-container>
     </v-main>
     <v-footer>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
+      <div>
+        &copy; {{ new Date().getFullYear() }} - Created by
+        <a
+          href="https://twitter.com/y_temp4"
+          target="_blank"
+          rel="noopener noreferrer"
+          >@y_temp4</a
+        >
+      </div>
     </v-footer>
   </v-app>
 </template>
