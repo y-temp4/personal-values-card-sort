@@ -63,6 +63,9 @@
         </template>
       </template>
       <template v-else>
+        <v-btn to="/values" nuxt class="font-weight-bold" x-large
+          >過去の診断を確認する</v-btn
+        >
         <template v-if="latestValue !== null && !hasFinishedValue">
           <v-btn
             color="primary"
@@ -78,7 +81,7 @@
             class="font-weight-bold"
             x-large
             @click="handleStart"
-            >診断をはじめる</v-btn
+            >新しい診断をはじめる</v-btn
           >
         </template>
       </template>
