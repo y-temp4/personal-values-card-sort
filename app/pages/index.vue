@@ -1,6 +1,9 @@
 <template>
   <main>
-    <h1>自己省察テスト</h1>
+    <p class="my-3">自己省察テストをしてみましょう！</p>
+    <p class="mt-2">
+      この機会に、あなたが大切に思う価値観を整理してみましょう。この診断に時間制限はありませんので、ゆっくり進めていただいて大丈夫です。
+    </p>
     <div>
       by
       <a
@@ -19,10 +22,7 @@
       >
       ）
     </div>
-    <p class="mt-2">
-      あなたが大切に思う価値観を整理してみましょう。この診断は時間制限などありませんので、ゆっくり進めていただいて大丈夫です。
-    </p>
-    <h2>診断の流れ</h2>
+    <h2 class="mt-5">診断の流れ</h2>
     <v-list>
       <v-list-item v-for="step in steps" :key="step.title">
         <v-list-item-icon>
@@ -34,60 +34,64 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <template v-if="!isLoggedIn">
-      <v-btn
-        color="primary"
-        class="font-weight-bold"
-        x-large
-        @click="handleStart"
-        >診断をはじめる</v-btn
-      >
-      <v-btn @click="loginWithGoogle" x-large>Googleでログイン</v-btn>
-    </template>
+    <v-progress-circular v-if="isLoading" indeterminate color="primary" />
     <template v-else>
-      <template v-if="isAnonymousUser">
-        <template v-if="!hasFinishedValue">
-          <v-btn
-            color="primary"
-            class="font-weight-bold"
-            x-large
-            @click="handleContinue"
-            >診断を続ける</v-btn
-          >
-        </template>
-        <template v-else>
-          <n-link :to="`/values/${latestValue && latestValue.id}`">
-            回答を見る
-          </n-link>
-          <v-btn @click="loginWithGoogle" x-large
-            >Googleでログインして診断データを保存する</v-btn
-          >
-        </template>
+      <template v-if="!isLoggedIn">
+        <v-btn
+          color="primary"
+          class="font-weight-bold"
+          x-large
+          @click="handleStart"
+          >診断をはじめる</v-btn
+        >
+        <v-btn @click="loginWithGoogle" x-large>Googleでログイン</v-btn>
       </template>
       <template v-else>
-        <v-btn to="/values" nuxt class="font-weight-bold" x-large
-          >過去の診断を確認する</v-btn
-        >
-        <template v-if="latestValue !== null && !hasFinishedValue">
-          <v-btn
-            color="primary"
-            class="font-weight-bold"
-            x-large
-            @click="handleContinue"
-            >診断を続ける</v-btn
-          >
+        <template v-if="isAnonymousUser">
+          <template v-if="!hasFinishedValue">
+            <v-btn
+              color="primary"
+              class="font-weight-bold"
+              x-large
+              @click="handleContinue"
+              >診断を続ける</v-btn
+            >
+          </template>
+          <template v-else>
+            <n-link :to="`/values/${latestValue && latestValue.id}`">
+              回答を見る
+            </n-link>
+            <v-btn @click="loginWithGoogle" x-large
+              >Googleでログインして診断データを保存する</v-btn
+            >
+          </template>
         </template>
         <template v-else>
-          <v-btn
-            color="primary"
-            class="font-weight-bold"
-            x-large
-            @click="handleStart"
-            >新しい診断をはじめる</v-btn
+          <v-btn to="/values" nuxt class="font-weight-bold" x-large
+            >過去の診断を確認する</v-btn
           >
+          <template v-if="latestValue !== null && !hasFinishedValue">
+            <v-btn
+              color="primary"
+              class="font-weight-bold"
+              x-large
+              @click="handleContinue"
+              >診断を続ける</v-btn
+            >
+          </template>
+          <template v-else>
+            <v-btn
+              color="primary"
+              class="font-weight-bold"
+              x-large
+              @click="handleStart"
+              >新しい診断をはじめる</v-btn
+            >
+          </template>
         </template>
       </template>
     </template>
+
     <br />
     <br />
     <v-btn
@@ -111,6 +115,7 @@ export default Vue.extend({
   data() {
     return {
       latestValue: null as Value | null,
+      isLoading: true,
     }
   },
   computed: {
@@ -147,7 +152,10 @@ export default Vue.extend({
   },
   async mounted() {
     await this.$accessor.user.getCurrentUser()
-    if (!this.currentUser) return
+    if (!this.currentUser) {
+      this.isLoading = false
+      return
+    }
     const [valueDocSnap] = (
       await this.$fire.firestore
         .collection('users')
@@ -157,13 +165,17 @@ export default Vue.extend({
         .limit(1)
         .get()
     ).docs
-    if (!valueDocSnap) return
+    if (!valueDocSnap) {
+      this.isLoading = false
+      return
+    }
     const valueDoc = valueDocSnap.data() as ValueDocData
     this.latestValue = {
       ...valueDoc,
       id: valueDocSnap.id,
       userRef: valueDoc.userRef.path,
     }
+    this.isLoading = false
   },
   methods: {
     async handleStart() {

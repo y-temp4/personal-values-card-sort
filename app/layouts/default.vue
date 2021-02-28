@@ -6,7 +6,7 @@
         style="text-decoration: none"
         class="font-weight-bold block mx-auto"
       >
-        自己省察テスト
+        <h1 class="text-h6 font-weight-bold">自己省察テスト</h1>
       </n-link>
     </v-app-bar>
     <v-main>

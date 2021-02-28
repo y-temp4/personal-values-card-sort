@@ -103,7 +103,7 @@
               </v-col>
             </draggable>
           </client-only>
-          <div class="flex mt-6">
+          <div class="flex mt-6 pb-3">
             <v-btn color="primary" @click="handleFinish">完了する</v-btn>
             <v-btn class="ml-3" @click="step = 2">ステップ2に戻る</v-btn>
           </div>

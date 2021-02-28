@@ -14,7 +14,14 @@
       >
         <!-- eslint-disable-next-line -->
         <template v-slot:item.detail="{ item }">
-          <v-btn :to="`/values/${item.id}`" nuxt> 詳細を見る </v-btn>
+          <v-btn
+            v-if="item.finishedAt !== '未完了'"
+            :to="`/values/${item.id}`"
+            nuxt
+          >
+            詳細を見る
+          </v-btn>
+          <v-btn v-else to="/submission" nuxt>診断を続ける</v-btn>
         </template>
       </v-data-table>
     </template>
@@ -48,7 +55,7 @@ export default Vue.extend({
   async mounted() {
     await this.$accessor.user.getCurrentUser()
     if (!this.currentUser) {
-      this.$nuxt.error({ statusCode: 404 })
+      this.$router.push('/')
       return
     }
     this.userValues = (

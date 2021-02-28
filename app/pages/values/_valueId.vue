@@ -22,6 +22,7 @@
       </v-row>
       <v-btn
         v-if="currentUser && currentUser.isAnonymous"
+        class="mt-4"
         @click="linkWithGoogle"
         >Googleで認証してデータを保存する</v-btn
       >
