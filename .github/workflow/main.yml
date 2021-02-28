@@ -1,0 +1,23 @@
+name: Deploy to Firebase
+
+'on':
+  push:
+    branches:
+      - master
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Install Dependencies of client
+        run: yarn install
+      - name: Install Dependencies of server
+        run: yarn install
+        working-directory: ./functions
+      - name: Deploy to firebase
+        run: yarn deploy --token=${{ secrets.FIREBASE_SERVICE_ACCOUNT_PERSONAL_VALUES_CARD_SORT }}
+        working-directory: ./functions
