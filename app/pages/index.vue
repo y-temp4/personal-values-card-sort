@@ -1,17 +1,39 @@
 <template>
   <main>
     <h1>自己省察テスト</h1>
-    <div>Personal Values Card Sort</div>
-    <p>
+    <div>
+      by
+      <a
+        href="https://motivationalinterviewing.org/personal-values-card-sort-instructions"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Personal Values Card Sort
+      </a>
+      （
+      <a
+        href="https://tazimi.up.seesaa.net/image/E887AAE5B7B1E79C81E5AF9F.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        >日本語</a
+      >
+      ）
+    </div>
+    <p class="mt-2">
       あなたが大切に思う価値観を整理してみましょう。この診断は時間制限などありませんので、ゆっくり進めていただいて大丈夫です。
     </p>
     <h2>診断の流れ</h2>
-    <v-list-item v-for="step in steps" :key="step.title">
-      <v-list-item-content>
-        <v-list-item-title>{{ step.title }}</v-list-item-title>
-        <v-list-item-subtitle>{{ step.description }}</v-list-item-subtitle>
-      </v-list-item-content>
-    </v-list-item>
+    <v-list>
+      <v-list-item v-for="step in steps" :key="step.title">
+        <v-list-item-icon>
+          <v-icon color="primary">mdi-check-bold</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>{{ step.title }}</v-list-item-title>
+          <v-list-item-subtitle>{{ step.description }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
     <template v-if="!isLoggedIn">
       <v-btn
         color="primary"
@@ -20,9 +42,7 @@
         @click="handleStart"
         >診断をはじめる</v-btn
       >
-      <v-btn @click="loginWithGoogle" x-large
-        >Googleでログイン（すでに診断済みの方向け）</v-btn
-      >
+      <v-btn @click="loginWithGoogle" x-large>Googleでログイン</v-btn>
     </template>
     <template v-else>
       <template v-if="isAnonymousUser">
@@ -83,6 +103,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { MetaInfo } from 'vue-meta'
 import firebase from 'firebase/app'
 import { User, Value, ValueDocData } from '~/types/model'
 
@@ -200,7 +221,6 @@ export default Vue.extend({
       })
       const valudId = (await valueDocRef.get()).id
       const value = (await valueDocRef.get()).data() as ValueDocData
-      console.log({ value })
       this.$accessor.value.setEditingValue({
         ...value,
         id: valudId,
@@ -240,6 +260,11 @@ export default Vue.extend({
         ...userData,
       })
     },
+  },
+  head(): MetaInfo {
+    return {
+      titleTemplate: '',
+    }
   },
 })
 </script>

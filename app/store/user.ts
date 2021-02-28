@@ -30,7 +30,6 @@ export const actions = actionTree(
         })
       }
       const user = await getCurrentUser()
-      console.log({ user })
       if (!user) return
       const userRef = await this.$fire.firestore
         .collection('users')

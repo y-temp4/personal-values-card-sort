@@ -4,7 +4,9 @@
       <v-progress-circular indeterminate color="primary" />
     </div>
     <div v-else>
-      診断日: <time>{{ formattedFinishedAt }}</time>
+      <p class="h3 mt-3">
+        診断日: <time>{{ formattedFinishedAt }}</time>
+      </p>
       <v-row>
         <v-col
           v-for="(value, index) in answeredValues"
@@ -33,6 +35,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import firebase from 'firebase/app'
+import { MetaInfo } from 'vue-meta'
 import { User, ValueDocData, Value } from '~/types/model'
 import { values } from '~/constants'
 
@@ -60,8 +63,10 @@ export default Vue.extend({
       return this.currentUser?.uid === this.value?.userRef.split('/')[1]
     },
     formattedFinishedAt(): string {
+      const seconds = this.value?.finishedAt?.seconds
+      if (!seconds) return ''
       const formattedFinishedAt = new Intl.DateTimeFormat('ja').format(
-        (this.value?.finishedAt?.seconds ?? 0) * 1000
+        seconds * 1000
       )
       return formattedFinishedAt
     },
@@ -75,11 +80,6 @@ export default Vue.extend({
         finishedAt: { seconds: Math.floor(Date.now() / 1000) },
       }
       this.isLoading = false
-      console.log(
-        'this.$accessor.value.editingValue',
-        this.$accessor.value.editingValue
-      )
-      console.log('this.value', this.value)
       return
     }
     const valueId = this.$route.params.valueId
@@ -128,7 +128,6 @@ export default Vue.extend({
       userRef: valueDocData.userRef.path,
     }
     this.isLoading = false
-    console.log({ valueDocData })
   },
   methods: {
     async linkWithGoogle() {
@@ -170,6 +169,11 @@ export default Vue.extend({
         })
       this.value = { ...this.value!, isPublic: !this.isPublic }
     },
+  },
+  head(): MetaInfo {
+    return {
+      title: `診断結果（${this.formattedFinishedAt}）`,
+    }
   },
 })
 </script>
