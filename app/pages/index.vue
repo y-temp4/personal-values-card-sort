@@ -254,9 +254,10 @@ export default Vue.extend({
     },
     async loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider()
-      const user = await this.$fire.auth.signInWithPopup(provider)
-      if (!user.user) return
-      const userDocRef = this.$fire.firestore.doc(`users/${user.user.uid}`)
+      const { user } = await this.$fire.auth.signInWithPopup(provider)
+      if (!user) return
+      const uid = user.uid
+      const userDocRef = this.$fire.firestore.doc(`users/${uid}`)
       const existsUser = (await userDocRef.get()).exists
       if (!existsUser) {
         await userDocRef.set({
@@ -264,17 +265,15 @@ export default Vue.extend({
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         })
       }
-      const userRef = this.$fire.firestore
-        .collection('users')
-        .doc(user.user.uid)
+      const userRef = this.$fire.firestore.collection('users').doc(uid)
       const userDataBase = (await userRef.get()).data
       const userData = {
         ...userDataBase,
-        uid: user.user.uid,
-        isAnonymous: user.user.isAnonymous
+        uid,
+        isAnonymous: user.isAnonymous
       } as User
       this.$accessor.user.setCurrentUser({ ...userData })
-      await this.setLatestValueByUserUid(user.user.uid)
+      await this.setLatestValueByUserUid(uid)
     }
   },
   head(): MetaInfo {

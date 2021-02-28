@@ -73,7 +73,7 @@ export default Vue.extend({
     return {
       isLoading: true,
       value: null as Value | null,
-      isShowSnapbar: false,
+      isShowSnapbar: false
     }
   },
   computed: {
@@ -82,7 +82,7 @@ export default Vue.extend({
     },
     values: () => values,
     answeredValues(): Values {
-      return values.filter((v) => this.value?.step3.includes(v.id))
+      return values.filter(v => this.value?.step3.includes(v.id))
     },
     isPublic(): boolean {
       return this.value?.isPublic ?? false
@@ -97,7 +97,7 @@ export default Vue.extend({
         seconds * 1000
       )
       return formattedFinishedAt
-    },
+    }
   },
   async fetch() {
     if (this.$accessor.value.editingValue) {
@@ -105,7 +105,7 @@ export default Vue.extend({
         ...this.$accessor.value.editingValue,
         // FIXME: finishedAtが取得できないので
         // @ts-expect-error
-        finishedAt: { seconds: Math.floor(Date.now() / 1000) },
+        finishedAt: { seconds: Math.floor(Date.now() / 1000) }
       }
       this.isLoading = false
       return
@@ -124,7 +124,7 @@ export default Vue.extend({
       this.value = {
         ...valueDocData,
         id: valueId,
-        userRef: valueDocData.userRef.path,
+        userRef: valueDocData.userRef.path
       }
       this.isLoading = false
     }
@@ -153,7 +153,7 @@ export default Vue.extend({
     this.value = {
       ...valueDocData,
       id: valueId,
-      userRef: valueDocData.userRef.path,
+      userRef: valueDocData.userRef.path
     }
     this.isLoading = false
   },
@@ -161,7 +161,10 @@ export default Vue.extend({
     async linkWithGoogle() {
       const getGoogleUser = async () => {
         if (process.env.NODE_ENV === 'development') {
-          const id = Math.random().toString(32).substring(2).slice(0, 6)
+          const id = Math.random()
+            .toString(32)
+            .substring(2)
+            .slice(0, 6)
           const credential = firebase.auth.GoogleAuthProvider.credential(
             `{"sub": "${id}", "email": "${id}@example.com", "email_verified": true}`
           )
@@ -177,11 +180,11 @@ export default Vue.extend({
           return user
         }
       }
-      const user = await getGoogleUser()
-      if (!user.user) return
+      const { user } = await getGoogleUser()
+      if (!user) return
       this.$accessor.user.setCurrentUser({
         ...this.currentUser!,
-        isAnonymous: user.user.isAnonymous,
+        isAnonymous: user.isAnonymous
       })
       alert('Googleアカウントで認証しました。')
     },
@@ -194,16 +197,16 @@ export default Vue.extend({
         .doc(this.value!.id)
         .update({
           isPublic: !this.isPublic,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         })
       this.value = { ...this.value!, isPublic: !this.isPublic }
       this.isShowSnapbar = true
-    },
+    }
   },
   head(): MetaInfo {
     return {
-      title: `診断結果（${this.formattedFinishedAt}）`,
+      title: `診断結果（${this.formattedFinishedAt}）`
     }
-  },
+  }
 })
 </script>
