@@ -17,5 +17,5 @@ jobs:
         run: yarn install
         working-directory: ./functions
       - name: Deploy to firebase
-        run: yarn deploy --token=${{ secrets.FIREBASE_SERVICE_ACCOUNT_PERSONAL_VALUES_CARD_SORT }}
+        run: yarn deploy --token=${{ secrets.FIREBASE_TOKEN }}
         working-directory: ./functions
