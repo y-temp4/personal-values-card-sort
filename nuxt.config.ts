@@ -1,5 +1,7 @@
 import { NuxtConfig } from '@nuxt/types'
 
+const isDev = process.env.NODE_ENV === 'development'
+
 const config: NuxtConfig = {
   srcDir: 'app',
   head: {
@@ -47,19 +49,19 @@ const config: NuxtConfig = {
     },
     services: {
       auth: {
-        emulatorPort: process.env.NODE_ENV === 'development' ? 9099 : undefined,
+        emulatorPort: isDev ? 9099 : undefined,
       },
       firestore: {
-        emulatorPort: process.env.NODE_ENV === 'development' ? 8080 : undefined,
+        emulatorPort: isDev ? 8080 : undefined,
       },
       functions: {
-        emulatorPort: process.env.NODE_ENV === 'development' ? 5001 : undefined,
+        emulatorPort: isDev ? 5001 : undefined,
       },
       analytics: true,
     },
   },
   buildOptimisations: {
-    profile: process.env.NODE_ENV === 'development' ? 'risky' : 'false',
+    profile: isDev ? 'risky' : 'false',
   },
 }
 
