@@ -155,7 +155,6 @@ export default Vue.extend({
       id: valueId,
       userRef: valueDocData.userRef.path,
     }
-    console.log('this.value', this.value)
     this.isLoading = false
   },
   methods: {
