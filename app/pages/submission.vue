@@ -143,9 +143,9 @@ export default Vue.extend({
       )
     },
     filteredValuesByStep2(): Values {
-      return this.values.filter((v) =>
-        this.step2SelectedValueIds.includes(v.id)
-      )
+      return this.step3SelectedValueIds.map((id) => {
+        return this.values.find((v) => v.id == id)!
+      })
     },
     currentUser(): User | null {
       return this.$accessor.user.currentUser
@@ -235,11 +235,21 @@ export default Vue.extend({
         console.error(error)
       }
     },
-    handleMoveToStep3() {
+    async handleMoveToStep3() {
+      await this.$fire.firestore
+        .collection('users')
+        .doc(this.currentUser!.uid)
+        .collection('values')
+        .doc(this.editingValue!.id)
+        .update({
+          step2: this.step2SelectedValueIds,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        })
       this.step = 3
       this.step3SelectedValueIds = this.step2SelectedValueIds
     },
-    async handleClickStep3Card() {
+    async handleClickStep3Card(step3SelectedValueIds: ValueId[]) {
+      this.step3SelectedValueIds = step3SelectedValueIds
       try {
         await this.$fire.firestore
           .collection('users')
