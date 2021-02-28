@@ -39,19 +39,21 @@
       <template v-if="!isLoggedIn">
         <v-btn
           color="primary"
-          class="font-weight-bold"
+          class="font-weight-bold ma-2"
           x-large
           @click="handleStart"
           >診断をはじめる</v-btn
         >
-        <v-btn @click="loginWithGoogle" x-large>Googleでログイン</v-btn>
+        <v-btn class="font-weight-bold ma-2" @click="loginWithGoogle" x-large
+          >Googleでログイン</v-btn
+        >
       </template>
       <template v-else>
         <template v-if="isAnonymousUser">
           <template v-if="!hasFinishedValue">
             <v-btn
               color="primary"
-              class="font-weight-bold"
+              class="font-weight-bold ma-2"
               x-large
               @click="handleContinue"
               >診断を続ける</v-btn
@@ -61,19 +63,22 @@
             <n-link :to="`/values/${latestValue && latestValue.id}`">
               回答を見る
             </n-link>
-            <v-btn @click="loginWithGoogle" x-large
+            <v-btn
+              class="font-weight-bold ma-2"
+              @click="loginWithGoogle"
+              x-large
               >Googleでログインして診断データを保存する</v-btn
             >
           </template>
         </template>
         <template v-else>
-          <v-btn to="/values" nuxt class="font-weight-bold" x-large
+          <v-btn to="/values" nuxt class="font-weight-bold ma-2" x-large
             >過去の診断を確認する</v-btn
           >
           <template v-if="latestValue !== null && !hasFinishedValue">
             <v-btn
               color="primary"
-              class="font-weight-bold"
+              class="font-weight-bold ma-2"
               x-large
               @click="handleContinue"
               >診断を続ける</v-btn
@@ -82,7 +87,7 @@
           <template v-else>
             <v-btn
               color="primary"
-              class="font-weight-bold"
+              class="font-weight-bold ma-2"
               x-large
               @click="handleStart"
               >新しい診断をはじめる</v-btn
@@ -97,7 +102,7 @@
     <v-btn
       v-if="isLoggedIn && !isAnonymousUser"
       color="info"
-      class="font-weight-bold"
+      class="font-weight-bold ma-2"
       x-large
       @click="handleLogout"
       >ログアウト</v-btn
@@ -115,7 +120,7 @@ export default Vue.extend({
   data() {
     return {
       latestValue: null as Value | null,
-      isLoading: true,
+      isLoading: true
     }
   },
   computed: {
@@ -137,18 +142,18 @@ export default Vue.extend({
         {
           title: 'ステップ1',
           description:
-            '自分が重要にしている価値観を選択して下さい。数は複数選択可能です。',
+            '自分が重要にしている価値観を選択して下さい。数は複数選択可能です。'
         },
         {
           title: 'ステップ2',
-          description: '選んだ価値観を 10 個に絞って下さい。',
+          description: '選んだ価値観を 10 個に絞って下さい。'
         },
         {
           title: 'ステップ3',
-          description: '10 個の価値観の順位付けをして下さい。',
-        },
+          description: '10 個の価値観の順位付けをして下さい。'
+        }
       ]
-    },
+    }
   },
   async mounted() {
     await this.$accessor.user.getCurrentUser()
@@ -173,7 +178,7 @@ export default Vue.extend({
     this.latestValue = {
       ...valueDoc,
       id: valueDocSnap.id,
-      userRef: valueDoc.userRef.path,
+      userRef: valueDoc.userRef.path
     }
     this.isLoading = false
   },
@@ -187,7 +192,7 @@ export default Vue.extend({
         if (!existsUser) {
           await userDocRef.set({
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
           })
           const userRef = this.$fire.firestore
             .collection('users')
@@ -196,10 +201,10 @@ export default Vue.extend({
           const userData = {
             ...userDataBase,
             uid: user.user.uid,
-            isAnonymous: user.user.isAnonymous,
+            isAnonymous: user.user.isAnonymous
           } as User
           this.$accessor.user.setCurrentUser({
-            ...userData,
+            ...userData
           })
         }
       }
@@ -229,14 +234,14 @@ export default Vue.extend({
         isPublic: false,
         finishedAt: null,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       })
       const valudId = (await valueDocRef.get()).id
       const value = (await valueDocRef.get()).data() as ValueDocData
       this.$accessor.value.setEditingValue({
         ...value,
         id: valudId,
-        userRef: value.userRef.path,
+        userRef: value.userRef.path
       })
       this.$router.push('/submission')
     },
@@ -256,7 +261,7 @@ export default Vue.extend({
       if (!existsUser) {
         await userDocRef.set({
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         })
       }
       const userRef = this.$fire.firestore
@@ -266,10 +271,10 @@ export default Vue.extend({
       const userData = {
         ...userDataBase,
         uid: user.user.uid,
-        isAnonymous: user.user.isAnonymous,
+        isAnonymous: user.user.isAnonymous
       } as User
       this.$accessor.user.setCurrentUser({
-        ...userData,
+        ...userData
       })
       const [valueDocSnap] = (
         await this.$fire.firestore
@@ -285,14 +290,14 @@ export default Vue.extend({
       this.latestValue = {
         ...valueDoc,
         id: valueDocSnap.id,
-        userRef: valueDoc.userRef.path,
+        userRef: valueDoc.userRef.path
       }
-    },
+    }
   },
   head(): MetaInfo {
     return {
-      titleTemplate: '',
+      titleTemplate: ''
     }
-  },
+  }
 })
 </script>
