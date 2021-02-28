@@ -178,12 +178,13 @@ export default Vue.extend({
         id: valueId,
         userRef: value.userRef.path,
       })
-      this.step1SelectedValueIds = value.step1
-      this.step2SelectedValueIds = value.step2
-      this.step3SelectedValueIds = value.step3
-      if (this.step2SelectedValueIds.length) this.step = 2
-      if (this.step3SelectedValueIds.length) this.step = 3
     }
+    const editingValue = this.editingValue!
+    this.step1SelectedValueIds = editingValue.step1
+    this.step2SelectedValueIds = editingValue.step2
+    this.step3SelectedValueIds = editingValue.step3
+    if (this.step2SelectedValueIds.length) this.step = 2
+    if (this.step3SelectedValueIds.length) this.step = 3
   },
   methods: {
     async handleClickStep1Card(id: ValueId) {
