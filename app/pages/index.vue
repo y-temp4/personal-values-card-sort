@@ -271,6 +271,22 @@ export default Vue.extend({
       this.$accessor.user.setCurrentUser({
         ...userData,
       })
+      const [valueDocSnap] = (
+        await this.$fire.firestore
+          .collection('users')
+          .doc(this.currentUser!.uid)
+          .collection('values')
+          .orderBy('createdAt', 'desc')
+          .limit(1)
+          .get()
+      ).docs
+      if (!valueDocSnap) return
+      const valueDoc = valueDocSnap.data() as ValueDocData
+      this.latestValue = {
+        ...valueDoc,
+        id: valueDocSnap.id,
+        userRef: valueDoc.userRef.path,
+      }
     },
   },
   head(): MetaInfo {
