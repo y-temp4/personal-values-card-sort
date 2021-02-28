@@ -42,6 +42,12 @@ export default Vue.extend({
           content: `${process.env.BASE_URL}${this.$route.fullPath}`,
         },
       ],
+      link: [
+        {
+          rel: 'canonical',
+          href: `https://pvcs.y-temp4.com${this.$route.fullPath}`,
+        },
+      ],
     }
   },
 })
