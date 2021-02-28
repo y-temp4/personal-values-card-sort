@@ -35,7 +35,26 @@
       </v-btn>
       <br />
       <br />
+      <p v-if="!isPublic">
+        公開された診断結果は、URLを知っている人であれば誰でも閲覧できます。
+      </p>
+      <br />
       <n-link to="/values" v-if="isAnsweredUser">診断結果一覧に戻る</n-link>
+      <v-snackbar v-model="isShowSnapbar" :timeout="2000">
+        {{
+          isPublic ? '診断結果を公開しました！' : '診断結果を非公開にしました。'
+        }}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            color="blue"
+            text
+            v-bind="attrs"
+            @click="isShowSnapbar = false"
+          >
+            閉じる
+          </v-btn>
+        </template>
+      </v-snackbar>
     </div>
   </div>
 </template>
@@ -54,6 +73,7 @@ export default Vue.extend({
     return {
       isLoading: true,
       value: null as Value | null,
+      isShowSnapbar: false,
     }
   },
   computed: {
@@ -110,10 +130,10 @@ export default Vue.extend({
     }
   },
   async mounted() {
+    await this.$accessor.user.getCurrentUser()
     if (this.$accessor.value.editingValue || this.value) {
       return
     }
-    await this.$accessor.user.getCurrentUser()
     const valueId = this.$route.params.valueId
     if (!this.currentUser) {
       this.$nuxt.error({ statusCode: 404 })
@@ -135,6 +155,7 @@ export default Vue.extend({
       id: valueId,
       userRef: valueDocData.userRef.path,
     }
+    console.log('this.value', this.value)
     this.isLoading = false
   },
   methods: {
@@ -166,6 +187,7 @@ export default Vue.extend({
       alert('Googleアカウントで認証しました。')
     },
     async changePublicStatus() {
+      this.isShowSnapbar = false
       await this.$fire.firestore
         .collection('users')
         .doc(this.currentUser!.uid)
@@ -176,6 +198,7 @@ export default Vue.extend({
           updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         })
       this.value = { ...this.value!, isPublic: !this.isPublic }
+      this.isShowSnapbar = true
     },
   },
   head(): MetaInfo {
