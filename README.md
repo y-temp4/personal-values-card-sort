@@ -1,20 +1,20 @@
 # personal-values-card-sort
 
-## Build Setup
+## Development
 
 ```bash
-# install dependencies
+$ cd functions
 $ yarn install
+$ yarn serve
 
-# serve with hot reload at localhost:3000
+# move to another terminal pane and...
+$ cd ..
+$ yarn install
 $ yarn dev
-
-# build for production and launch server
-$ yarn build
-$ yarn start
-
-# generate static project
-$ yarn generate
 ```
 
-For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
+Go to http://localhost:3000.
+
+## License
+
+MIT
