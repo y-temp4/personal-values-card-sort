@@ -1,6 +1,6 @@
 <template>
   <main>
-    <v-stepper v-model="step">
+    <v-stepper v-model="step" class="mb-3">
       <v-stepper-header>
         <v-stepper-step :complete="step > 1" step="1">
           ステップ1
