@@ -24,8 +24,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred',
+      pageNotFound: '404 Not Found - ページが見つかりませんでした。',
+      otherError: 'エラーが発生しました。',
     }
   },
   head(): MetaInfo {

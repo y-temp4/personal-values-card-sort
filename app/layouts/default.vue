@@ -15,7 +15,7 @@
       </v-container>
     </v-main>
     <v-footer>
-      <div>
+      <v-container class="py-1">
         &copy; {{ new Date().getFullYear() }} - Created by
         <a
           href="https://twitter.com/y_temp4"
@@ -23,7 +23,7 @@
           rel="noopener noreferrer"
           >@y_temp4</a
         >
-      </div>
+      </v-container>
     </v-footer>
   </v-app>
 </template>
