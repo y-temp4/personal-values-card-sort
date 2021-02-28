@@ -11,12 +11,11 @@
           :key="value.id"
           :cols="6"
         >
-          <v-card class="mb-2" :color="`blue lighten-2`">
-            <v-card-title>
-              {{ `${index + 1}位: ${value.label}` }}
-            </v-card-title>
-            <v-card-text> {{ value.description }} </v-card-text>
-          </v-card>
+          <ValueCard
+            :value="value"
+            selected
+            :label="`${index + 1}位: ${value.label}`"
+          />
         </v-col>
       </v-row>
       <v-btn

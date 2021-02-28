@@ -1,9 +1,15 @@
 <template>
   <v-app>
     <v-app-bar app dense absolute elevation="3">
-      <v-toolbar-title>
-        <n-link to="/"> 自己省察テスト </n-link>
-      </v-toolbar-title>
+      <v-toolbar>
+        <v-spacer />
+        <v-toolbar-title>
+          <n-link to="/" style="text-decoration: none" class="font-weight-bold">
+            自己省察テスト
+          </n-link>
+        </v-toolbar-title>
+        <v-spacer />
+      </v-toolbar>
     </v-app-bar>
     <v-main>
       <v-container>

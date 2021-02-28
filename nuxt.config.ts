@@ -29,7 +29,9 @@ const config: NuxtConfig = {
     customVariables: ['~/assets/variables.scss'],
     theme: {
       themes: {
-        primary: '#40c057',
+        light: {
+          primary: '#40c057',
+        },
       },
     },
   },

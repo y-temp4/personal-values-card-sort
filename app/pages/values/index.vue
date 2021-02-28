@@ -10,18 +10,11 @@
       :items-per-page="10"
       class="elevation-1"
     >
+      <!-- eslint-disable-next-line -->
       <template v-slot:item.detail="{ item }">
         <v-btn :to="`/values/${item.id}`" nuxt> 詳細を見る </v-btn>
       </template>
     </v-data-table>
-    <!-- <ul>
-      <li v-for="value in userValues" :key="value.id">
-        <n-link :to="`/values/${value.id}`">
-          {{ value.id }}
-          {{ formatFinishedAt(value.finishedAt.toDate()) }}
-        </n-link>
-      </li>
-    </ul> -->
   </div>
 </template>
 
@@ -29,7 +22,6 @@
 import Vue from 'vue'
 import firebase from 'firebase/app'
 import { User, ValueDocData, Value } from '~/types/model'
-import { values } from '~/constants'
 
 const headers = [
   { text: '診断日', value: 'finishedAt' },

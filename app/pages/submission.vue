@@ -21,16 +21,12 @@
           </p>
           <v-row>
             <v-col v-for="value in values" :key="value.id" :cols="cardSize">
-              <v-card
-                :color="`${
-                  step1SelectedValueIds.includes(value.id) ? 'blue' : 'grey'
-                } lighten-2`"
+              <ValueCard
+                :value="value"
+                :selected="step1SelectedValueIds.includes(value.id)"
                 hover
                 @click="handleClickStep1Card(value.id)"
-              >
-                <v-card-title> {{ value.label }} </v-card-title>
-                <v-card-text> {{ value.description }} </v-card-text>
-              </v-card>
+              />
             </v-col>
           </v-row>
           <v-footer fixed>
@@ -57,19 +53,14 @@
               :key="value.id"
               :cols="cardSize"
             >
-              <v-card
-                :color="`${
-                  step2SelectedValueIds.includes(value.id) ? 'blue' : 'grey'
-                } lighten-2`"
+              <ValueCard
+                :value="value"
+                :selected="step2SelectedValueIds.includes(value.id)"
                 hover
                 @click="handleClickStep2Card(value.id)"
-              >
-                <v-card-title> {{ value.label }} </v-card-title>
-                <v-card-text> {{ value.description }} </v-card-text>
-              </v-card>
+              />
             </v-col>
           </v-row>
-
           <v-footer fixed>
             <v-container class="my-1">
               <v-row align="center">
@@ -90,7 +81,6 @@
 
         <v-stepper-content step="3">
           <p>10 個の価値観の順位付けをして下さい。</p>
-
           <client-only>
             <draggable
               :value="step3SelectedValueIds"
@@ -104,18 +94,12 @@
                 :key="value.id"
                 :cols="cardSize"
               >
-                <v-card
-                  :key="value.id"
-                  :color="`${
-                    step2SelectedValueIds.includes(value.id) ? 'blue' : 'grey'
-                  } lighten-2`"
+                <ValueCard
+                  :value="value"
+                  :selected="step2SelectedValueIds.includes(value.id)"
                   hover
-                >
-                  <v-card-title>
-                    {{ `${index + 1}位: ${value.label}` }}
-                  </v-card-title>
-                  <v-card-text> {{ value.description }} </v-card-text>
-                </v-card>
+                  :label="`${index + 1}位: ${value.label}`"
+                />
               </v-col>
             </draggable>
           </client-only>

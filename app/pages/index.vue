@@ -6,28 +6,10 @@
       あなたが大切に思う価値観を整理してみましょう。この診断は時間制限などありませんので、ゆっくり進めていただいて大丈夫です。
     </p>
     <h2>診断の流れ</h2>
-    <v-list-item>
+    <v-list-item v-for="step in steps" :key="step.title">
       <v-list-item-content>
-        <v-list-item-title>ステップ 1</v-list-item-title>
-        <v-list-item-subtitle
-          >自分が重要にしている価値観を選択して下さい。数は複数選択可能です。</v-list-item-subtitle
-        >
-      </v-list-item-content>
-    </v-list-item>
-    <v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>ステップ 2</v-list-item-title>
-        <v-list-item-subtitle
-          >選んだ価値観を 10 個に絞って下さい。</v-list-item-subtitle
-        >
-      </v-list-item-content>
-    </v-list-item>
-    <v-list-item>
-      <v-list-item-content>
-        <v-list-item-title>ステップ 3</v-list-item-title>
-        <v-list-item-subtitle
-          >10 個の価値観の順位付けをして下さい。</v-list-item-subtitle
-        >
+        <v-list-item-title>{{ step.title }}</v-list-item-title>
+        <v-list-item-subtitle>{{ step.description }}</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
     <template v-if="!isLoggedIn">
@@ -38,7 +20,7 @@
         @click="handleStart"
         >診断をはじめる</v-btn
       >
-      <v-btn @click="loginWithGoogle"
+      <v-btn @click="loginWithGoogle" x-large
         >Googleでログイン（すでに診断済みの方向け）</v-btn
       >
     </template>
@@ -57,7 +39,7 @@
           <n-link :to="`/values/${latestValue && latestValue.id}`">
             回答を見る
           </n-link>
-          <v-btn @click="loginWithGoogle"
+          <v-btn @click="loginWithGoogle" x-large
             >Googleでログインして診断データを保存する</v-btn
           >
         </template>
@@ -103,7 +85,6 @@
 import Vue from 'vue'
 import firebase from 'firebase/app'
 import { User, Value, ValueDocData } from '~/types/model'
-import { values } from '~/constants'
 
 export default Vue.extend({
   data() {
@@ -124,6 +105,23 @@ export default Vue.extend({
     hasFinishedValue(): boolean {
       if (!this.latestValue) return false
       return this.latestValue.finishedAt !== null
+    },
+    steps(): { title: string; description: string }[] {
+      return [
+        {
+          title: 'ステップ1',
+          description:
+            '自分が重要にしている価値観を選択して下さい。数は複数選択可能です。',
+        },
+        {
+          title: 'ステップ2',
+          description: '選んだ価値観を 10 個に絞って下さい。',
+        },
+        {
+          title: 'ステップ3',
+          description: '10 個の価値観の順位付けをして下さい。',
+        },
+      ]
     },
   },
   async mounted() {
