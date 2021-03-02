@@ -204,8 +204,21 @@ export default Vue.extend({
     }
   },
   head(): MetaInfo {
+    const title = `診断結果（${this.formattedFinishedAt}）`
     return {
-      title: `診断結果（${this.formattedFinishedAt}）`
+      title,
+      meta: [
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: `${title} | 自己省察テスト`
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: '自己省察テストの診断結果'
+        }
+      ]
     }
   }
 })

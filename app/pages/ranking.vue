@@ -60,8 +60,26 @@ export default Vue.extend({
     }
   },
   head(): MetaInfo {
+    const description = '重要視されている価値観のランキングです。'
     return {
-      title: '価値観ランキング'
+      title: '価値観ランキング',
+      meta: [
+        {
+          hid: 'description',
+          property: 'description',
+          content: description
+        },
+        {
+          hid: 'og:title',
+          property: 'og:title',
+          content: '価値観ランキング | 自己省察テスト'
+        },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: description
+        }
+      ]
     }
   }
 })
