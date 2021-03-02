@@ -229,7 +229,12 @@ export default Vue.extend({
     }
   },
   head(): MetaInfo {
-    const title = `診断結果（${this.formattedFinishedAt}）`
+    const userValueId = this.value?.step3[0]
+    const userValueName =
+      this.values.find(v => v.id === userValueId)?.label || null
+    const title = userValueName
+      ? `最も重要視している価値観は「${userValueName}」です。`
+      : ''
     return {
       title,
       meta: [
