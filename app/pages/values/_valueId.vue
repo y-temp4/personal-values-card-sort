@@ -40,6 +40,16 @@
       </p>
       <br />
       <n-link to="/values" v-if="isAnsweredUser">診断結果一覧に戻る</n-link>
+      <br />
+      <br />
+      <v-btn
+        v-if="currentUser && isPublic"
+        class="mx-auto white--text font-weight-bold"
+        color="#1DA1F2"
+        :href="tweetPath"
+        target="_blank"
+        >ツイートする</v-btn
+      >
       <v-snackbar v-model="isShowSnapbar" :timeout="2000">
         {{
           isPublic ? '診断結果を公開しました！' : '診断結果を非公開にしました。'
@@ -97,6 +107,21 @@ export default Vue.extend({
         seconds * 1000
       )
       return formattedFinishedAt
+    },
+    tweetPath(): string {
+      const userValueId = this.value?.step3[0]
+      const userValueName =
+        this.values.find(v => v.id === userValueId)?.label || ''
+      const base = 'https://twitter.com/intent/tweet'
+      const url = `https://pvcs.y-temp4.com/values/${this.value?.id}`
+      const text = encodeURIComponent(
+        `私が大切にしている価値観は「${userValueName}」です`
+      )
+      const hashtags = '自己省察テスト'
+      const via = 'y_temp4'
+      const related = 'y_temp4'
+      const tweetURL = `${base}?url=${url}&text=${text}&hashtags=${hashtags}&via=${via}&related=${related}`
+      return tweetURL
     }
   },
   async fetch() {
