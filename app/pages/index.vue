@@ -1,10 +1,12 @@
 <template>
-  <main>
-    <p class="my-3">自己省察テストをしてみましょう！</p>
-    <p class="mt-2">
-      この機会に、あなたが大切に思う価値観を整理してみましょう。この診断に時間制限はありませんので、ゆっくり進めていただいて大丈夫です。
-    </p>
-    <div>
+  <main class="wrapper-main">
+    <v-alert type="success" border="left" class="font-weight-bold mt-2">
+      <p>自己省察テストをしてみましょう！</p>
+      <p class="mb-0">
+        この機会に、あなたが大切に思う価値観を整理してみましょう。この診断に時間制限はありませんので、ゆっくり進めていただいて大丈夫です。
+      </p>
+    </v-alert>
+    <div class="text-right">
       by
       <a
         href="https://motivationalinterviewing.org/personal-values-card-sort-instructions"
@@ -13,14 +15,12 @@
       >
         Personal Values Card Sort
       </a>
-      （
-      <a
+      （<a
         href="https://tazimi.up.seesaa.net/image/E887AAE5B7B1E79C81E5AF9F.pdf"
         target="_blank"
         rel="noopener noreferrer"
         >日本語</a
-      >
-      ）
+      >）
     </div>
     <h2 class="mt-5">診断の流れ</h2>
     <v-list>
@@ -34,7 +34,7 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
-    <p class="mt-5">
+    <p class="mt-5 mx-2 text-body-2">
       ※自分が重要にしている価値観を定めるのが難しい場合は、<n-link
         to="/self-aware-questions"
         target="_blank"
@@ -294,3 +294,10 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style scoped>
+.wrapper-main {
+  max-width: 900px;
+  margin: 0 auto;
+}
+</style>

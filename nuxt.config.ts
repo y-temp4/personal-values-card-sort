@@ -44,6 +44,7 @@ const config: NuxtConfig = {
     typecheck: true,
   },
   vuetify: {
+    treeShake: true,
     customVariables: ['~/assets/variables.scss'],
     theme: {
       themes: {
