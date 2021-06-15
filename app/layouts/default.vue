@@ -48,6 +48,14 @@ export default Vue.extend({
           href: `https://pvcs.y-temp4.com${this.$route.fullPath}`,
         },
       ],
+      style: [
+        {
+          hid: 'vuetifyTheme',
+          type: 'text/css',
+          // @ts-expect-error
+          cssText: this.$vuetify.theme.generatedStyles,
+        },
+      ],
     }
   },
 })
