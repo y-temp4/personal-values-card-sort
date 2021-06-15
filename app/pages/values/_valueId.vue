@@ -92,7 +92,10 @@ export default Vue.extend({
     },
     values: () => values,
     answeredValues(): Values {
-      return values.filter(v => this.value?.step3.includes(v.id))
+      return (this.value?.step3 ?? []).map(id => {
+        const value = values.find(v => v.id === id)!
+        return value
+      })
     },
     isPublic(): boolean {
       return this.value?.isPublic ?? false
