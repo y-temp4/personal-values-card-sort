@@ -77,6 +77,9 @@ const config: NuxtConfig = {
       analytics: true,
     },
   },
+  build: {
+    extractCSS: true,
+  },
 }
 
 export default config
