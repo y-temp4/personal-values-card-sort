@@ -26,7 +26,7 @@
     <v-list>
       <v-list-item v-for="step in steps" :key="step.title">
         <v-list-item-icon>
-          <v-icon color="primary">mdi-check-bold</v-icon>
+          <v-icon color="primary">{{ step.icon }}</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>{{ step.title }}</v-list-item-title>
@@ -34,6 +34,14 @@
         </v-list-item-content>
       </v-list-item>
     </v-list>
+    <p class="mt-5">
+      ※自分が重要にしている価値観を定めるのが難しい場合は、<n-link
+        to="/self-aware-questions"
+        target="_blank"
+        >こちらの質問リスト</n-link
+      >
+      を参考にしてみてください。
+    </p>
     <v-progress-circular v-if="isLoading" indeterminate color="primary" />
     <template v-else>
       <template v-if="!isLoggedIn">
@@ -137,19 +145,22 @@ export default Vue.extend({
       if (!this.latestValue) return false
       return this.latestValue.finishedAt !== null
     },
-    steps(): { title: string; description: string }[] {
+    steps(): { title: string; icon: string; description: string }[] {
       return [
         {
           title: 'ステップ1',
+          icon: 'mdi-check-bold',
           description:
             '自分が重要にしている価値観を選択して下さい。数は複数選択可能です。'
         },
         {
           title: 'ステップ2',
+          icon: 'mdi-delete',
           description: '選んだ価値観を 10 個に絞って下さい。'
         },
         {
           title: 'ステップ3',
+          icon: 'mdi-crown',
           description: '10 個の価値観の順位付けをして下さい。'
         }
       ]
