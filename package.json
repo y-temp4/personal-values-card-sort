@@ -14,7 +14,7 @@
     "@nuxtjs/firebase": "7.5.0",
     "core-js": "3.9.0",
     "firebase": "8.2.9",
-    "nuxt": "2.15.2",
+    "nuxt": "2.15.7",
     "nuxt-typed-vuex": "0.1.22",
     "vuedraggable": "2.24.3"
   },
