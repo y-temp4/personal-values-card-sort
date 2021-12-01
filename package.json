@@ -22,6 +22,6 @@
     "@nuxt/types": "2.15.2",
     "@nuxt/typescript-build": "2.0.6",
     "@nuxtjs/vuetify": "1.11.3",
-    "prettier": "2.2.1"
+    "prettier": "2.5.0"
   }
 }
