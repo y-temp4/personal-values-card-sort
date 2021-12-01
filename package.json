@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@nuxtjs/firebase": "7.5.0",
-    "core-js": "3.9.0",
+    "core-js": "3.19.2",
     "firebase": "8.2.9",
     "nuxt": "2.15.2",
     "nuxt-typed-vuex": "0.1.22",
