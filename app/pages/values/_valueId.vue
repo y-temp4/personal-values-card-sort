@@ -38,6 +38,16 @@
       <p v-if="!isPublic">
         公開された診断結果は、URLを知っている人であれば誰でも閲覧できます。
       </p>
+      <p>各価値観の詳細を知りたい方は、以下のコンテンツもご確認ください。</p>
+      <p>
+        <a
+          href="https://note.com/y_temp4/n/n50a5938ce404"
+          target="_blank"
+          rel="noopener noreferrer"
+          >✅「自己省察テスト」で見つけた価値観の活用ガイド:
+          具体的な行動提案/オススメ書籍/目標設定など</a
+        >
+      </p>
       <br />
       <n-link to="/values" v-if="isAnsweredUser">診断結果一覧に戻る</n-link>
       <br />
@@ -83,7 +93,7 @@ export default Vue.extend({
     return {
       isLoading: true,
       value: null as Value | null,
-      isShowSnapbar: false
+      isShowSnapbar: false,
     }
   },
   computed: {
@@ -92,8 +102,8 @@ export default Vue.extend({
     },
     values: () => values,
     answeredValues(): Values {
-      return (this.value?.step3 ?? []).map(id => {
-        const value = values.find(v => v.id === id)!
+      return (this.value?.step3 ?? []).map((id) => {
+        const value = values.find((v) => v.id === id)!
         return value
       })
     },
@@ -114,7 +124,7 @@ export default Vue.extend({
     tweetPath(): string {
       const userValueId = this.value?.step3[0]
       const userValueName =
-        this.values.find(v => v.id === userValueId)?.label || ''
+        this.values.find((v) => v.id === userValueId)?.label || ''
       const base = 'https://twitter.com/intent/tweet'
       const url = `https://pvcs.y-temp4.com/values/${this.value?.id}`
       const text = encodeURIComponent(
@@ -125,7 +135,7 @@ export default Vue.extend({
       const related = 'y_temp4'
       const tweetURL = `${base}?url=${url}&text=${text}&hashtags=${hashtags}&via=${via}&related=${related}`
       return tweetURL
-    }
+    },
   },
   async fetch() {
     if (this.$accessor.value.editingValue) {
@@ -133,7 +143,7 @@ export default Vue.extend({
         ...this.$accessor.value.editingValue,
         // FIXME: finishedAtが取得できないので
         // @ts-expect-error
-        finishedAt: { seconds: Math.floor(Date.now() / 1000) }
+        finishedAt: { seconds: Math.floor(Date.now() / 1000) },
       }
       this.isLoading = false
       return
@@ -152,7 +162,7 @@ export default Vue.extend({
       this.value = {
         ...valueDocData,
         id: valueId,
-        userRef: valueDocData.userRef.path
+        userRef: valueDocData.userRef.path,
       }
       this.isLoading = false
     }
@@ -181,7 +191,7 @@ export default Vue.extend({
     this.value = {
       ...valueDocData,
       id: valueId,
-      userRef: valueDocData.userRef.path
+      userRef: valueDocData.userRef.path,
     }
     this.isLoading = false
   },
@@ -189,10 +199,7 @@ export default Vue.extend({
     async linkWithGoogle() {
       const getGoogleUser = async () => {
         if (process.env.NODE_ENV === 'development') {
-          const id = Math.random()
-            .toString(32)
-            .substring(2)
-            .slice(0, 6)
+          const id = Math.random().toString(32).substring(2).slice(0, 6)
           const credential = firebase.auth.GoogleAuthProvider.credential(
             `{"sub": "${id}", "email": "${id}@example.com", "email_verified": true}`
           )
@@ -212,7 +219,7 @@ export default Vue.extend({
       if (!user) return
       this.$accessor.user.setCurrentUser({
         ...this.currentUser!,
-        isAnonymous: user.isAnonymous
+        isAnonymous: user.isAnonymous,
       })
       alert('Googleアカウントで認証しました。')
     },
@@ -225,16 +232,16 @@ export default Vue.extend({
         .doc(this.value!.id)
         .update({
           isPublic: !this.isPublic,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
         })
       this.value = { ...this.value!, isPublic: !this.isPublic }
       this.isShowSnapbar = true
-    }
+    },
   },
   head(): MetaInfo {
     const userValueId = this.value?.step3[0]
     const userValueName =
-      this.values.find(v => v.id === userValueId)?.label || null
+      this.values.find((v) => v.id === userValueId)?.label || null
     const title = userValueName
       ? `最も重要視している価値観は「${userValueName}」です。`
       : ''
@@ -244,15 +251,15 @@ export default Vue.extend({
         {
           hid: 'og:title',
           property: 'og:title',
-          content: `${title} | 自己省察テスト`
+          content: `${title} | 自己省察テスト`,
         },
         {
           hid: 'og:description',
           property: 'og:description',
-          content: '自己省察テストの診断結果'
-        }
-      ]
+          content: '自己省察テストの診断結果',
+        },
+      ],
     }
-  }
+  },
 })
 </script>
