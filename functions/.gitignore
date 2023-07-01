@@ -11,3 +11,8 @@ node_modules/
 index.js
 nuxt.config.js
 src/nuxt.config.ts
+
+misc/serviceAccountKey.json
+
+# firebase emulators:export ./data/
+data
