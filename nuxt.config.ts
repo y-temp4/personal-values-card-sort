@@ -84,9 +84,7 @@ const config: NuxtConfig = {
   generate: {
     // For Cloudflare Pages
     fallback: '404.html',
-  },
-  router: {
-    trailingSlash: false,
+    subFolders: false,
   },
 }
 
