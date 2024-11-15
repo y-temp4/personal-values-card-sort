@@ -39,7 +39,7 @@ const config: NuxtConfig = {
     '@nuxtjs/vuetify',
     'nuxt-typed-vuex',
   ],
-  modules: ['@nuxtjs/firebase'],
+  modules: ['@nuxtjs/firebase', '@nuxt/content'],
   typescript: {
     typecheck: true,
   },

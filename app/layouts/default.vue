@@ -15,14 +15,18 @@
       </v-container>
     </v-main>
     <v-footer>
-      <v-container class="py-1">
-        &copy; {{ new Date().getFullYear() }} - Created by
-        <a
-          href="https://twitter.com/y_temp4"
-          target="_blank"
-          rel="noopener noreferrer"
-          >@y_temp4</a
-        >
+      <v-container class="py-3" :style="{ display: 'flex', gap: '12px', flexWrap: 'wrap' }">
+        <n-link to="/">トップ</n-link>
+        <n-link to="/posts">記事一覧</n-link>
+        <span>
+          &copy; {{ new Date().getFullYear() }} - Created by
+          <a
+            href="https://twitter.com/y_temp4"
+            target="_blank"
+            rel="noopener noreferrer"
+            >@y_temp4</a
+          >
+        </span>
       </v-container>
     </v-footer>
   </v-app>
