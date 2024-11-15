@@ -86,7 +86,7 @@ const config: NuxtConfig = {
     fallback: '404.html',
   },
   router: {
-    trailingSlash: false,
+    trailingSlash: true,
   },
 }
 
