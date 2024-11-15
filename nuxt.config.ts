@@ -84,6 +84,7 @@ const config: NuxtConfig = {
   sitemap: {
     hostname: 'https://pvcs.y-temp4.com',
     gzip: true,
+    exclude: ['/ranking', '/submission', '/values'],
     routes: async () => {
       // HACK: await import すると @nuxt/content の型が読み込まれ、その結果
       // @nuxtjs/firebase が型エラーになるため仕方なく require で読み込んでいる。

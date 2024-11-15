@@ -1,2 +1,6 @@
 User-agent: *
+Disallow: /ranking
+Disallow: /submission
+Disallow: /values
+
 Sitemap: https://pvcs.y-temp4.com/sitemap.xml.gz
