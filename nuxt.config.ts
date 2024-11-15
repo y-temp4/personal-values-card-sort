@@ -81,6 +81,10 @@ const config: NuxtConfig = {
   build: {
     extractCSS: true,
   },
+  generate: {
+    // For Cloudflare Pages
+    fallback: '404.html',
+  },
 }
 
 export default config
