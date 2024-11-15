@@ -52,7 +52,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    formattedPublishedAt() {
+    formattedPublishedAt(): string {
       return new Date(this.post.publishedAt).toLocaleDateString()
     },
   },
