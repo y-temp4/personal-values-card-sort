@@ -85,6 +85,9 @@ const config: NuxtConfig = {
     // For Cloudflare Pages
     fallback: '404.html',
   },
+  router: {
+    trailingSlash: false,
+  },
 }
 
 export default config
