@@ -30,6 +30,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { MetaInfo } from 'vue-meta'
 import { NuxtContentPost, Post } from '~/types/model'
 
 export default Vue.extend({
@@ -55,6 +56,11 @@ export default Vue.extend({
     formattedPublishedAt(): string {
       return new Date(this.post.publishedAt).toLocaleDateString()
     },
+  },
+  head(): MetaInfo {
+    return {
+      title: this.post.title,
+    }
   },
 })
 </script>
