@@ -141,6 +141,15 @@ export default Vue.extend({
     letter-spacing: 0.04em;
   }
 
+  & h4 {
+    margin-top: 54px;
+    margin-bottom: -18px;
+    font-size: 19px;
+    font-weight: 700;
+    font-feature-settings: 'palt' 1;
+    letter-spacing: 0.04em;
+  }
+
   > ul {
     padding-left: 24px;
     margin: 36px 0;
@@ -209,6 +218,10 @@ export default Vue.extend({
 
     & h3 {
       font-size: 18px;
+    }
+
+    & h4 {
+      font-size: 17px;
     }
 
     & ul {

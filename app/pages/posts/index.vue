@@ -1,11 +1,23 @@
 <template>
   <main>
     <h1 class="post-list-title">記事一覧</h1>
-    <ul>
-      <li v-for="post in posts" :key="post.slug" :style="{ fontSize: '20px' }">
-        <nuxt-link :to="`/posts/${post.slug}`">{{ post.title }}</nuxt-link>
-      </li>
-    </ul>
+    <div class="post-list">
+      <nuxt-link
+        v-for="post in posts"
+        :key="post.slug"
+        :to="`/posts/${post.slug}`"
+        class="post"
+      >
+        <div class="post-left">
+          <div class="post-title">
+            {{ post.title }}
+          </div>
+          <div class="post-published-at">
+            {{ formatPublishedAt(post.publishedAt) }}
+          </div>
+        </div>
+      </nuxt-link>
+    </div>
   </main>
 </template>
 
@@ -24,6 +36,16 @@ export default Vue.extend({
   },
   data() {
     return { posts: [] as NuxtContentPost[] }
+  },
+  methods: {
+    formatPublishedAt(publishedAt: string): string {
+      const date = new Date(publishedAt)
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+
+      return `${year}.${month}.${day}`
+    },
   },
   head(): MetaInfo {
     return {
@@ -53,7 +75,48 @@ main {
   font-feature-settings: 'palt' 1;
 }
 
-li {
-  margin: 9px 0;
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
+
+.post {
+  padding: 16px;
+  border: 1px solid #e1e4e8;
+  border-radius: 4px;
+  text-decoration: none;
+  color: #08131a;
+  transition: background-color 0.2s;
+  display: flex;
+  gap: 8px;
+
+  &:hover {
+    background-color: #f6f8fa;
+  }
+}
+
+.post-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.post-title {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.post-published-at {
+  color: rgba(8, 19, 26, 0.6588235294117647);
+  font-size: 14px;
+}
+
+/* .post-thumbnail {
+  width: 120px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 2px;
+} */
 </style>
