@@ -11,6 +11,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { MetaInfo } from 'vue-meta'
 import { NuxtContentPost, Post } from '~/types/model'
 
 export default Vue.extend({
@@ -23,6 +24,11 @@ export default Vue.extend({
   },
   data() {
     return { posts: [] as NuxtContentPost[] }
+  },
+  head(): MetaInfo {
+    return {
+      title: '記事一覧',
+    }
   },
 })
 </script>
