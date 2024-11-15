@@ -40,7 +40,7 @@ const config: NuxtConfig = {
     '@nuxtjs/vuetify',
     'nuxt-typed-vuex',
   ],
-  modules: ['@nuxtjs/firebase', '@nuxt/content'],
+  modules: ['@nuxtjs/firebase', '@nuxt/content', '@nuxtjs/sitemap'],
   typescript: {
     typecheck: true,
   },
@@ -80,6 +80,27 @@ const config: NuxtConfig = {
   },
   build: {
     extractCSS: true,
+  },
+  sitemap: {
+    hostname: 'https://pvcs.y-temp4.com',
+    gzip: true,
+    routes: async () => {
+      // HACK: await import すると @nuxt/content の型が読み込まれ、その結果
+      // @nuxtjs/firebase が型エラーになるため仕方なく require で読み込んでいる。
+      const { $content } = require('@nuxt/content')
+      const posts = await $content()
+        .only(['path', 'publishedAt', 'editedAt'])
+        .fetch()
+      if (!Array.isArray(posts)) return
+      return [
+        ...posts.map((entry) => {
+          return {
+            url: `/posts/${entry.path}`,
+            lastmod: entry.publishedAt,
+          }
+        }),
+      ]
+    },
   },
   generate: {
     // For Cloudflare Pages

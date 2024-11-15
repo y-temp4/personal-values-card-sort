@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://pvcs.y-temp4.com/sitemap.xml.gz
