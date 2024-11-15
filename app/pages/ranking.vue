@@ -26,13 +26,13 @@ type Values = typeof values
 type ValueRanking = Values[number] & { selectedCount: number }
 
 export default Vue.extend({
-  async fetch() {
+  async mounted() {
     const selectedValueIds = (
       await this.$fire.firestore
         .collectionGroup('values')
         .where('isPublic', '==', true)
         .get()
-    ).docs.flatMap(doc => {
+    ).docs.flatMap((doc) => {
       const valueDocData = doc.data() as ValueDocData
       return valueDocData.step3
     })
@@ -40,24 +40,24 @@ export default Vue.extend({
   },
   data() {
     return {
-      selectedValueIds: [] as ValueId[]
+      selectedValueIds: [] as ValueId[],
     }
   },
   computed: {
     valueRanking(): ValueRanking[] {
       const valueRanking = values
-        .map(value => {
+        .map((value) => {
           const selectedCount = [...this.selectedValueIds].filter(
-            vid => vid === value.id
+            (vid) => vid === value.id
           ).length
           return {
             ...value,
-            selectedCount
+            selectedCount,
           }
         })
         .sort((a, b) => b.selectedCount - a.selectedCount)
       return valueRanking
-    }
+    },
   },
   head(): MetaInfo {
     const description = '重要視されている価値観のランキングです。'
@@ -67,20 +67,20 @@ export default Vue.extend({
         {
           hid: 'description',
           property: 'description',
-          content: description
+          content: description,
         },
         {
           hid: 'og:title',
           property: 'og:title',
-          content: '価値観ランキング | 自己省察テスト'
+          content: '価値観ランキング | 自己省察テスト',
         },
         {
           hid: 'og:description',
           property: 'og:description',
-          content: description
-        }
-      ]
+          content: description,
+        },
+      ],
     }
-  }
+  },
 })
 </script>
