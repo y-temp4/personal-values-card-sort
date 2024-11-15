@@ -6,6 +6,7 @@ const title = '自己省察テスト'
 const description = '自己省察テストを通じて自己理解を深めましょう。'
 
 const config: NuxtConfig = {
+  target: 'static',
   srcDir: 'app',
   head: {
     titleTemplate: `%s - ${title}`,

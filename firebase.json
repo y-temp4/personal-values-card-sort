@@ -4,7 +4,7 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "predeploy": "npm --prefix functions run build && npm run build && npm run copy:ssr",
+    "predeploy": "npm --prefix functions run build && npm run build && npm run generate && npm run copy:ssr",
     "source": "functions"
   },
   "hosting": {
@@ -18,7 +18,8 @@
     "rewrites": [{
       "source": "**",
       "function": "ssr"
-    }]
+    }],
+    "trailingSlash": false
   },
   "emulators": {
     "auth": {
