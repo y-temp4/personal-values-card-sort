@@ -12,6 +12,7 @@
     "node": "14"
   },
   "dependencies": {
+    "@nuxt/content": "1.15.1",
     "@nuxtjs/firebase": "7.5.0",
     "firebase": "8.2.9",
     "firebase-admin": "^9.2.0",
