@@ -97,7 +97,7 @@ const config: NuxtConfig = {
         ...posts.map((entry) => {
           return {
             url: `/posts/${entry.path}`,
-            lastmod: entry.publishedAt,
+            lastmod: entry.editedAt || entry.publishedAt,
           }
         }),
       ]
