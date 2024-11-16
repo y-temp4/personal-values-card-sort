@@ -48,12 +48,28 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import remark from 'remark'
+import strip from 'strip-markdown'
 import { MetaInfo } from 'vue-meta'
 import { NuxtContentPost, Post } from '~/types/model'
 
+function getDescriptionByMDText(text: string) {
+  const OG_DESCRIPTION_WORD_COUNT = 120
+  const entryText = remark()
+    .use(strip)
+    .processSync(text)
+    .toString()
+    .replace(/\n/g, '')
+  const description =
+    entryText.length < OG_DESCRIPTION_WORD_COUNT
+      ? entryText
+      : `${entryText.substr(0, OG_DESCRIPTION_WORD_COUNT)}...`
+  return description
+}
+
 export default Vue.extend({
   async asyncData({ $content, params }) {
-    const post = await $content(params.slug).fetch<Post>()
+    const post = await $content(params.slug, { text: true }).fetch<Post>()
     const posts = await $content().sortBy('publishedAt', 'desc').fetch<Post>()
     const filteredPosts = posts.filter(
       (p: NuxtContentPost) => p.slug !== params.slug
@@ -66,7 +82,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      post: {} as NuxtContentPost,
+      post: {} as NuxtContentPost & { text: string },
       filteredPosts: {} as NuxtContentPost,
     }
   },
@@ -90,8 +106,25 @@ export default Vue.extend({
     },
   },
   head(): MetaInfo {
+    const title = this.post.title
+    const description = getDescriptionByMDText(this.post.text)
     return {
-      title: this.post.title,
+      title,
+      meta: [
+        { hid: 'og:title', property: 'og:title', content: title },
+        { hid: 'description', name: 'description', content: description },
+        {
+          hid: 'og:description',
+          property: 'og:description',
+          content: description,
+        },
+      ],
+      link: [
+        {
+          rel: 'canonical',
+          href: `https://pvcs.y-temp4.com/posts/${this.post.slug}`,
+        },
+      ],
     }
   },
 })
