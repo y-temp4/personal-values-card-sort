@@ -123,6 +123,10 @@ export default Vue.extend({
     margin: 36px 0;
   }
 
+  & strong {
+    font-weight: 700;
+  }
+
   & h2 {
     margin-top: 54px;
     margin-bottom: -18px;
